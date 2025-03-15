@@ -1,9 +1,13 @@
+'use client'
+
 import Calendar from '@/components/calendar/Calendar'
 
-export default function Home() {
+const CalendarPage = () => {
     return (
-        <div className="min-h-screen p-6 h-full flex hide-scroll">
+        <div className="p-6">
             <Calendar />
         </div>
     )
 }
+
+export default CalendarPage
