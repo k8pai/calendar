@@ -39,12 +39,7 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
 
     const handleActions = (actionName: string) => {
         // TODO: Implement the logic to handle the selected action
-        console.log(
-            `Handling action: ${actionName} for day: ${format(
-                day,
-                'MMMM d, yyyy'
-            )}`
-        )
+
         let genEvent = {
             id: uuidv4(),
             title: `Event ${dailyEvents.length} of ${format(

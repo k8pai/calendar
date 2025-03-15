@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import useScrollTracker from '@/hooks/useScrollTracker'
 import {
     addDays,
     addMonths,
@@ -28,7 +27,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ view }) => {
     // const [currentDate, setCurrentDate] = useState(new Date())
 
     const [currentDate, setCurrentDate] = useState(new Date())
-    const isScrolling = useScrollTracker(300)
 
     const firstDayOfMonth = startOfMonth(currentDate)
     const lastDayOfMonth = endOfMonth(currentDate)
@@ -52,14 +50,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ view }) => {
     // Calculate the remaining days to fill the last row (so that the grid is 6 rows of 7 columns)
     const remainingDays = 6 - lastDayWeekday
 
-    console.log(
-        'last day week day for ',
-        format(currentDate, 'dd-MM'),
-        ' is ...',
-        lastDayWeekday
-    )
-    console.log('remaining days', remainingDays)
-
     const daysInNextMonth =
         remainingDays > 0
             ? eachDayOfInterval({
@@ -73,12 +63,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ view }) => {
         ...daysInCurrentMonth,
         ...daysInNextMonth,
     ]
-    // Example implementation:
 
-    console.log(
-        'days in next month',
-        daysInNextMonth.map((day) => format(day, 'd'))
-    )
     return (
         <div className="container mx-auto">
             {/* <p>

@@ -58,7 +58,6 @@ const Day: React.FC<CalendarProps> = ({ view }) => {
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            console.log('this work...')
             if (event.key === 'ArrowRight') {
                 goToNextDay()
             } else if (event.key === 'ArrowLeft') {

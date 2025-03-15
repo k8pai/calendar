@@ -96,7 +96,6 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
     }
 
     const goToPreviousMonth = (fromScroll?: boolean) => {
-        console.log("i'm called once...")
         dispatch(setSelectedDate(subMonths(selectedDate, 1).toISOString()))
         setMovedTo('P')
     }
@@ -108,7 +107,6 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            console.log('this work...')
             if (event.key === 'ArrowRight') {
                 goToNextMonth()
             } else if (event.key === 'ArrowLeft') {

@@ -90,7 +90,6 @@ const Week: React.FC<CalendarProps> = ({ view }) => {
     }
 
     const goToPreviousWeek = (fromScroll?: boolean) => {
-        console.log("i'm called once...")
         dispatch(setSelectedDate(subWeeks(selectedDate, 1).toISOString()))
         setMovedTo('P')
     }
@@ -102,7 +101,6 @@ const Week: React.FC<CalendarProps> = ({ view }) => {
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            console.log('this work...')
             if (event.key === 'ArrowRight') {
                 goToNextWeek()
             } else if (event.key === 'ArrowLeft') {

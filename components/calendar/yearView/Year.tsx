@@ -71,7 +71,6 @@ const Year: React.FC<CalendarProps> = ({ view }) => {
     }
 
     const goToPreviousYear = (fromScroll?: boolean) => {
-        console.log("i'm called once...")
         dispatch(setSelectedDate(subYears(selectedDate, 1).toISOString()))
         setMovedTo('P')
     }
@@ -83,7 +82,6 @@ const Year: React.FC<CalendarProps> = ({ view }) => {
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            console.log('this work...')
             if (event.key === 'ArrowRight') {
                 goToNextYear()
             } else if (event.key === 'ArrowLeft') {
