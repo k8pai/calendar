@@ -1,13 +1,6 @@
 'use client'
 
 import MonthView from '@/components/calendar/yearView/MonthView'
-import { Button } from '@/components/ui/button'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
 import { cn } from '@/lib/utils'
 import { setSelectedDate } from '@/slices/calendarSlice'
@@ -20,9 +13,8 @@ import {
     startOfYear,
     subYears,
 } from 'date-fns'
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { motion } from 'motion/react'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 interface CalendarProps {
     view?: string
@@ -38,8 +30,6 @@ let events = {
 }
 
 const Year: React.FC<CalendarProps> = ({ view }) => {
-    const ref = useRef<HTMLDivElement>(null)
-
     const dispatch = useAppDispatch()
 
     const { selectedDate, events } = useAppSelector((state) => state.calendar)
@@ -56,7 +46,7 @@ const Year: React.FC<CalendarProps> = ({ view }) => {
                 start: firstDayOfYear,
                 end: lastDayOfYear,
             }),
-        []
+        [selectedDate]
     )
 
     // Example implementation:
@@ -80,82 +70,23 @@ const Year: React.FC<CalendarProps> = ({ view }) => {
         setMovedTo('N')
     }
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowRight') {
-                goToNextYear()
-            } else if (event.key === 'ArrowLeft') {
-                goToPreviousYear()
-            }
-        }
+    // useEffect(() => {
+    //     const handleKeyDown = (event: KeyboardEvent) => {
+    //         if (event.key === 'ArrowRight') {
+    //             goToNextYear()
+    //         } else if (event.key === 'ArrowLeft') {
+    //             goToPreviousYear()
+    //         }
+    //     }
 
-        window.addEventListener('keydown', handleKeyDown)
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown)
-        }
-    }, [goToNextYear, goToPreviousYear])
+    //     window.addEventListener('keydown', handleKeyDown)
+    //     return () => {
+    //         window.removeEventListener('keydown', handleKeyDown)
+    //     }
+    // }, [goToNextYear, goToPreviousYear])
 
     return (
-        <div
-            className="flex-1 flex flex-col transition-all overflow-hidden text-xs"
-            ref={ref}
-        >
-            <div className="mb-4 flex justify-between items-center space-x-2">
-                <Button
-                    className="group transition-all cursor-pointer"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => goToPreviousYear()}
-                >
-                    <ChevronLeft className="group-hover:scale-110" />
-                </Button>
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    key={format(selectedDate, 'MMMM yyyy')}
-                    className="flex items-center space-x-2"
-                >
-                    <span className="text-center font-bold uppercase">
-                        {format(selectedDate, 'MMMM yyyy')}
-                    </span>
-
-                    {!isSameMonth(selectedDate, new Date()) && (
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        className="group transition-all cursor-pointer"
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() => resetDate()}
-                                    >
-                                        <RotateCcw />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent
-                                    side="top"
-                                    avoidCollisions={true}
-                                >
-                                    <p>Go To {format(new Date(), 'MMMM')}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    )}
-                </motion.div>
-                <Button
-                    className="group transition-all cursor-pointer"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => goToNextYear()}
-                >
-                    <ChevronRight className="group-hover:scale-110" />
-                </Button>
-            </div>
+        <div className="flex-1 flex flex-col transition-all overflow-hidden text-xs">
             <motion.div
                 className={cn(
                     `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 flex-1 
@@ -178,7 +109,7 @@ const Year: React.FC<CalendarProps> = ({ view }) => {
                             className={cn(
                                 `rounded-tl-md rounded-tr-md pb-0 m-8 transition-all flex-0`
                             )}
-                            key={format(month, 'ddMMMMuuuu') + index}
+                            key={format(month, 'uuuu-MM-MMMM') + index}
                             initial={{
                                 opacity: 0,
                             }}

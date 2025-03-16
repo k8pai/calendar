@@ -16,7 +16,7 @@ import {
     subDays,
 } from 'date-fns'
 import { motion } from 'motion/react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 interface CalendarProps {
     view?: string
@@ -85,20 +85,20 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
         dispatch(setSelectedDate(new Date().toISOString()))
     }
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowRight') {
-                goToNextMonth()
-            } else if (event.key === 'ArrowLeft') {
-                goToPreviousMonth()
-            }
-        }
+    // useEffect(() => {
+    //     const handleKeyDown = (event: KeyboardEvent) => {
+    //         if (event.key === 'ArrowRight') {
+    //             goToNextMonth()
+    //         } else if (event.key === 'ArrowLeft') {
+    //             goToPreviousMonth()
+    //         }
+    //     }
 
-        window.addEventListener('keydown', handleKeyDown)
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown)
-        }
-    }, [goToNextMonth, goToPreviousMonth])
+    //     window.addEventListener('keydown', handleKeyDown)
+    //     return () => {
+    //         window.removeEventListener('keydown', handleKeyDown)
+    //     }
+    // }, [goToNextMonth, goToPreviousMonth])
 
     return (
         <div className="flex-1 flex flex-col transition-all overflow-hidden">

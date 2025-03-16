@@ -1,31 +1,20 @@
 'use client'
 
 import Day from '@/components/calendar/monthView/day'
-import { Button } from '@/components/ui/button'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
+import { useCalendarAction } from '@/hooks/useCalendarActions'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { cn } from '@/lib/utils'
-import { setSelectedDate } from '@/slices/calendarSlice'
 import {
     addDays,
-    addWeeks,
     eachDayOfInterval,
     endOfWeek,
     format,
     getDay,
-    isSameWeek,
     startOfWeek,
     subDays,
-    subWeeks,
 } from 'date-fns'
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { motion } from 'motion/react'
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 
 interface CalendarProps {
     view?: string
@@ -35,32 +24,27 @@ interface CalendarProps {
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 const Week: React.FC<CalendarProps> = ({ view }) => {
-    const ref = useRef<HTMLDivElement>(null)
-
-    const dispatch = useAppDispatch()
-
     const { selectedDate } = useAppSelector((state) => state.calendar)
+    const { lastAction } = useCalendarAction()
 
     // TODO: Implement the logic to render the calendar grid based on the provided view and current date
-    const [movedTo, setMovedTo] = useState<'P' | 'N' | null>(null)
+    const firstDayOfWeek = startOfWeek(selectedDate)
+    const lastDayOfWeek = endOfWeek(selectedDate)
 
-    const firstDayOfMonth = startOfWeek(selectedDate)
-    const lastDayOfMonth = endOfWeek(selectedDate)
-
-    const firstDayWeekday = getDay(firstDayOfMonth) // 0 for Sunday, 1 for Monday, etc.
-    const lastDayWeekday = getDay(lastDayOfMonth) // 0 for Sunday, 1 for Monday, etc.
+    const firstDayWeekday = getDay(firstDayOfWeek) // 0 for Sunday, 1 for Monday, etc.
+    const lastDayWeekday = getDay(lastDayOfWeek) // 0 for Sunday, 1 for Monday, etc.
 
     const daysInPreviousMonth =
         firstDayWeekday > 0
             ? eachDayOfInterval({
-                  start: subDays(firstDayOfMonth, firstDayWeekday),
-                  end: subDays(firstDayOfMonth, 7),
+                  start: subDays(firstDayOfWeek, firstDayWeekday),
+                  end: subDays(firstDayOfWeek, 7),
               })
             : []
 
-    const daysInCurrentMonth = eachDayOfInterval({
-        start: firstDayOfMonth,
-        end: lastDayOfMonth,
+    const daysInCurrentWeek = eachDayOfInterval({
+        start: firstDayOfWeek,
+        end: lastDayOfWeek,
     })
 
     // Calculate the remaining days to fill the last row (so that the grid is 6 rows of 7 columns)
@@ -68,123 +52,29 @@ const Week: React.FC<CalendarProps> = ({ view }) => {
     const daysInNextMonth =
         remainingDays > 0
             ? eachDayOfInterval({
-                  start: addDays(lastDayOfMonth, 7),
-                  end: addDays(lastDayOfMonth, remainingDays),
+                  start: addDays(lastDayOfWeek, 7),
+                  end: addDays(lastDayOfWeek, remainingDays),
               })
             : []
 
     const allDays = [
         ...daysInPreviousMonth,
-        ...daysInCurrentMonth,
+        ...daysInCurrentWeek,
         ...daysInNextMonth,
     ]
     // Example implementation:
 
-    const resetDate = () => {
-        if (isSameWeek(new Date(), selectedDate)) {
-            return
-        }
-        setMovedTo(null)
-
-        dispatch(setSelectedDate(new Date().toISOString()))
-    }
-
-    const goToPreviousWeek = (fromScroll?: boolean) => {
-        dispatch(setSelectedDate(subWeeks(selectedDate, 1).toISOString()))
-        setMovedTo('P')
-    }
-
-    const goToNextWeek = (fromScroll?: boolean) => {
-        dispatch(setSelectedDate(addWeeks(selectedDate, 1).toISOString()))
-        setMovedTo('N')
-    }
-
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowRight') {
-                goToNextWeek()
-            } else if (event.key === 'ArrowLeft') {
-                goToPreviousWeek()
-            }
-        }
-
-        window.addEventListener('keydown', handleKeyDown)
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown)
-        }
-    }, [goToNextWeek, goToPreviousWeek])
-
     return (
-        <div
-            className="flex-1 flex flex-col transition-all overflow-hidden "
-            ref={ref}
-        >
-            <div className="mb-4 flex justify-between items-center space-x-2">
-                <Button
-                    className="group transition-all cursor-pointer"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => goToPreviousWeek()}
-                >
-                    <ChevronLeft className="group-hover:scale-110" />
-                </Button>
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    key={format(selectedDate, 'MMMM yyyy')}
-                    className="flex items-center space-x-2"
-                >
-                    <span className="text-center font-bold uppercase">
-                        {format(selectedDate, 'MMMM yyyy')}
-                    </span>
-
-                    {!isSameWeek(selectedDate, new Date()) && (
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        className="group transition-all cursor-pointer"
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() => resetDate()}
-                                    >
-                                        <RotateCcw />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent
-                                    side="top"
-                                    avoidCollisions={true}
-                                >
-                                    <p>Go To {format(new Date(), 'MMMM')}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    )}
-                </motion.div>
-                <Button
-                    className="group transition-all cursor-pointer"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => goToNextWeek()}
-                >
-                    <ChevronRight className="group-hover:scale-110" />
-                </Button>
-            </div>
-
+        <div className="flex-1 flex flex-col transition-all overflow-hidden">
             <motion.div
                 className={cn(`grid grid-cols-7 gap-1 border-b-0 `)}
                 key={format(selectedDate, 'ddMMMMuuuu') + ' - ' + 'header'}
                 initial={{
                     opacity: 0,
                     transform: `translateX(${
-                        movedTo === 'P'
+                        lastAction === 'P'
                             ? '-20%'
-                            : movedTo === 'N'
+                            : lastAction === 'N'
                             ? '20%'
                             : '0%'
                     })`,
@@ -224,9 +114,9 @@ const Week: React.FC<CalendarProps> = ({ view }) => {
                 initial={{
                     opacity: 0,
                     transform: `translateX(${
-                        movedTo === 'P'
+                        lastAction === 'P'
                             ? '-20%'
-                            : movedTo === 'N'
+                            : lastAction === 'N'
                             ? '20%'
                             : '0%'
                     })`,

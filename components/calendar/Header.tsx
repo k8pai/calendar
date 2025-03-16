@@ -6,7 +6,9 @@ import {
     ResetButton,
 } from '@/components/calendar/Actions'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
+import { useCalendarView } from '@/hooks/useCalendarView'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { viewModes } from '@/lib/constants'
 import {
     Tooltip,
     TooltipContent,
@@ -21,7 +23,15 @@ interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
     const { selectedDate } = useAppSelector((state) => state.calendar)
+    const calendarViewMode = useCalendarView()
     const { isCurrSelected } = useCalendarAction()
+
+    const getHeader = () => {
+        if (calendarViewMode === viewModes.YEAR) {
+            return format(selectedDate, 'yyyy')
+        }
+        return format(selectedDate, 'MMMM yyyy')
+    }
 
     return (
         <div className="mb-4 flex justify-between items-center space-x-2">
@@ -38,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
                 className="flex items-center space-x-2"
             >
                 <span className="text-center font-bold uppercase">
-                    {format(selectedDate, 'MMMM yyyy')}
+                    {getHeader()}
                 </span>
 
                 {!isCurrSelected() && (

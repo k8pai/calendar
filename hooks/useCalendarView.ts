@@ -11,15 +11,17 @@ export const useCalendarView = () => {
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            console.log('this work... event.key => ', event.key)
             if (event.key === 'd') {
-                console.log('viewMode changed to => ', viewModes.DAY)
+                console.log('setting view mode to  => ', viewModes.DAY)
                 dispatch(setViewMode(viewModes.DAY))
             } else if (event.key === 'w') {
+                console.log('setting view mode to  => ', viewModes.WEEK)
                 dispatch(setViewMode(viewModes.WEEK))
             } else if (event.key === 'm') {
+                console.log('setting view mode to  => ', viewModes.MONTH)
                 dispatch(setViewMode(viewModes.MONTH))
             } else if (event.key === 'y') {
+                console.log('setting view mode to  => ', viewModes.YEAR)
                 dispatch(setViewMode(viewModes.YEAR))
             }
         }

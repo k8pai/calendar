@@ -96,7 +96,7 @@ const MonthView: React.FC<CalendarProps> = ({ monthDate, selectedDate }) => {
                             className={cn(
                                 `pb-0 transition-all text-center flex-0`
                             )}
-                            key={index}
+                            key={`weekday-${weekday}-index`}
                         >
                             <div className="uppercase font-semibold text-sm">
                                 {weekday}
@@ -133,6 +133,7 @@ const MonthView: React.FC<CalendarProps> = ({ monthDate, selectedDate }) => {
                                     'bg-secondary font-bold'
                             )}
                             onClick={() => setDate(day)}
+                            key={`${day.toString()}-day`}
                         >
                             {format(day, 'dd')}
                         </div>
