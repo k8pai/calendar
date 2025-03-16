@@ -1,19 +1,12 @@
 'use client'
 
 import Day from '@/components/calendar/monthView/day'
-import { Button } from '@/components/ui/button'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
 import { cn } from '@/lib/utils'
 import { setSelectedDate } from '@/slices/calendarSlice'
 import {
     addDays,
-    addMonths,
     eachDayOfInterval,
     endOfMonth,
     format,
@@ -21,11 +14,9 @@ import {
     isSameMonth,
     startOfMonth,
     subDays,
-    subMonths,
 } from 'date-fns'
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { motion } from 'motion/react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface CalendarProps {
     view?: string
@@ -41,11 +32,10 @@ let events = {
 }
 
 const Month: React.FC<CalendarProps> = ({ view }) => {
-    const ref = useRef<HTMLDivElement>(null)
-
     const dispatch = useAppDispatch()
 
     const { selectedDate, events } = useAppSelector((state) => state.calendar)
+    const { goToPreviousMonth, goToNextMonth } = useCalendarAction()
 
     // TODO: Implement the logic to render the calendar grid based on the provided view and current date
     const [movedTo, setMovedTo] = useState<'P' | 'N' | null>(null)
@@ -95,16 +85,6 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
         dispatch(setSelectedDate(new Date().toISOString()))
     }
 
-    const goToPreviousMonth = (fromScroll?: boolean) => {
-        dispatch(setSelectedDate(subMonths(selectedDate, 1).toISOString()))
-        setMovedTo('P')
-    }
-
-    const goToNextMonth = (fromScroll?: boolean) => {
-        dispatch(setSelectedDate(addMonths(selectedDate, 1).toISOString()))
-        setMovedTo('N')
-    }
-
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'ArrowRight') {
@@ -121,11 +101,8 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
     }, [goToNextMonth, goToPreviousMonth])
 
     return (
-        <div
-            className="flex-1 flex flex-col transition-all overflow-hidden "
-            ref={ref}
-        >
-            <div className="mb-4 flex justify-between items-center space-x-2">
+        <div className="flex-1 flex flex-col transition-all overflow-hidden">
+            {/* <div className="mb-4 flex justify-between items-center space-x-2">
                 <Button
                     className="group transition-all cursor-pointer"
                     variant="outline"
@@ -180,7 +157,7 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
                 >
                     <ChevronRight className="group-hover:scale-110" />
                 </Button>
-            </div>
+            </div> */}
 
             <motion.div
                 className={cn(`grid grid-cols-7 gap-1 border-b-0 `)}

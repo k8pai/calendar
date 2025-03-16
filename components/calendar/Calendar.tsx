@@ -6,7 +6,7 @@ import Week from '@/components/calendar/weekView/Week'
 import Year from '@/components/calendar/yearView/Year'
 import { useCalendarView } from '@/hooks/useCalendarView'
 import { viewModes } from '@/lib/constants'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 interface CalendarProps {
     view?: string
@@ -15,8 +15,6 @@ interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = ({ view }) => {
     const calendarViewMode = useCalendarView()
-
-    useEffect(() => {}, [calendarViewMode])
 
     if (calendarViewMode === viewModes.DAY) {
         return <Day />
