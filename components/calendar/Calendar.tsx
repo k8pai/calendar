@@ -4,7 +4,7 @@ import Day from '@/components/calendar/dayView/Day'
 import Month from '@/components/calendar/monthView/Month'
 import Week from '@/components/calendar/weekView/Week'
 import Year from '@/components/calendar/yearView/Year'
-import { useCalendarView } from '@/hooks/useCalendarView'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import React from 'react'
 
@@ -14,7 +14,9 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ view }) => {
-    const calendarViewMode = useCalendarView()
+    const { viewMode: calendarViewMode } = useAppSelector(
+        (state) => state.calendar
+    )
 
     if (calendarViewMode === viewModes.DAY) {
         return <Day />

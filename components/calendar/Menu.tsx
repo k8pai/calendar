@@ -9,11 +9,11 @@ import {
     MenubarShortcut,
     MenubarTrigger,
 } from '@/components/ui/menubar'
-import { useCalendarView } from '@/hooks/useCalendarView'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 const Menu = () => {
-    const viewMode = useCalendarView()
+    const { viewMode } = useAppSelector((state) => state.calendar)
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (

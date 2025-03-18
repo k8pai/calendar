@@ -2,6 +2,10 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import { setSelectedDate, setViewMode } from '@/slices/calendarSlice'
 import {
+    setKeystrokeListener,
+    toggleKeystrokeListener,
+} from '@/slices/keyboardSlice'
+import {
     addDays,
     addMonths,
     addWeeks,
@@ -15,7 +19,7 @@ import {
     subWeeks,
     subYears,
 } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 export const useCalendarAction = () => {
     const dispatch = useAppDispatch()
     const [prev, setPrev] = useState<'P' | 'N' | null>(null)
@@ -23,6 +27,8 @@ export const useCalendarAction = () => {
     const { viewMode: calendarViewMode } = useAppSelector(
         (state) => state.calendar
     )
+
+    const { listening } = useAppSelector((state) => state.keystroke)
 
     const { selectedDate } = useAppSelector((state) => state.calendar)
 
@@ -107,6 +113,31 @@ export const useCalendarAction = () => {
         }
     }
 
+    const setDayView = () => {
+        dispatch(setViewMode(viewModes.DAY))
+    }
+
+    const setWeekView = () => {
+        dispatch(setViewMode(viewModes.WEEK))
+    }
+
+    const setMonthView = () => {
+        dispatch(setViewMode(viewModes.MONTH))
+    }
+
+    const setYearView = () => {
+        dispatch(setViewMode(viewModes.YEAR))
+    }
+
+    const toggleKeystroke = () => {
+        dispatch(toggleKeystrokeListener(listening))
+    }
+
+    const setKeystroke = (ks: boolean) => {
+        if (listening === ks) return
+        dispatch(setKeystrokeListener(ks))
+    }
+
     const previous = (cb?: Function) => {
         switch (calendarViewMode) {
             case viewModes.DAY:
@@ -143,7 +174,6 @@ export const useCalendarAction = () => {
                 break
             case viewModes.WEEK:
                 console.log('goToNextWeek')
-
                 goToNextWeek(cb)
                 break
             case viewModes.MONTH:
@@ -174,44 +204,6 @@ export const useCalendarAction = () => {
         }
     }
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            switch (event.key) {
-                case 'ArrowLeft':
-                    console.log('getting previous ', calendarViewMode)
-                    previous()
-                    break
-                case 'ArrowRight':
-                    console.log('getting next ', calendarViewMode)
-                    next()
-                    break
-                case 'd':
-                    console.log('setting view mode to  => ', viewModes.DAY)
-                    dispatch(setViewMode(viewModes.DAY))
-                    break
-                case 'w':
-                    console.log('setting view mode to  => ', viewModes.WEEK)
-                    dispatch(setViewMode(viewModes.WEEK))
-                    break
-                case 'm':
-                    console.log('setting view mode to  => ', viewModes.MONTH)
-                    dispatch(setViewMode(viewModes.MONTH))
-                    break
-                case 'y':
-                    console.log('setting view mode to  => ', viewModes.YEAR)
-                    dispatch(setViewMode(viewModes.YEAR))
-                    break
-                default:
-                    break
-            }
-        }
-
-        window.addEventListener('keydown', handleKeyDown)
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown)
-        }
-    }, [previous, next, setViewMode, dispatch])
-
     return {
         lastAction: prev,
         goToPreviousDay,
@@ -227,5 +219,11 @@ export const useCalendarAction = () => {
         reset,
         setDate,
         isCurrSelected,
+        setDayView,
+        setWeekView,
+        setMonthView,
+        setYearView,
+        toggleKeystroke,
+        setKeystroke,
     }
 }

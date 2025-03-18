@@ -5,8 +5,8 @@ import {
     PrevButton,
     ResetButton,
 } from '@/components/calendar/Actions'
+import ShortcutInput from '@/components/calendar/ShortcutInput'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
-import { useCalendarView } from '@/hooks/useCalendarView'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import {
@@ -23,7 +23,11 @@ interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
     const { selectedDate } = useAppSelector((state) => state.calendar)
-    const calendarViewMode = useCalendarView()
+    const { viewMode: calendarViewMode } = useAppSelector(
+        (state) => state.calendar
+    )
+    const { listening } = useAppSelector((state) => state.keystroke)
+
     const { isCurrSelected } = useCalendarAction()
 
     const getHeader = () => {
@@ -36,34 +40,42 @@ const Header: React.FC<HeaderProps> = ({}) => {
     return (
         <div className="mb-4 flex justify-between items-center space-x-2">
             <PrevButton />
-            <motion.div
-                initial={{
-                    opacity: 0,
-                }}
-                animate={{
-                    opacity: 1,
-                }}
-                transition={{ duration: 0.3 }}
-                key={format(selectedDate, 'MMMM yyyy')}
-                className="flex items-center space-x-2"
-            >
-                <span className="text-center font-bold uppercase">
-                    {getHeader()}
-                </span>
 
-                {!isCurrSelected() && (
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <ResetButton />
-                            </TooltipTrigger>
-                            <TooltipContent side="top" avoidCollisions={true}>
-                                <p>Go To {format(new Date(), 'MMMM')}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                )}
-            </motion.div>
+            <div className="flex justify-center relative">
+                <motion.div
+                    initial={{
+                        opacity: 1,
+                    }}
+                    animate={{
+                        opacity: listening ? 0 : 1,
+                        // scale: listening ? 0 : 1,
+                    }}
+                    transition={{ duration: 0.1 }}
+                    key={format(selectedDate, 'MMMM yyyy')}
+                    className="flex items-center space-x-2"
+                >
+                    <span className="text-center font-bold uppercase">
+                        {getHeader()}
+                    </span>
+
+                    {!isCurrSelected() && (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <ResetButton />
+                                </TooltipTrigger>
+                                <TooltipContent
+                                    side="top"
+                                    avoidCollisions={true}
+                                >
+                                    <p>Go To {format(new Date(), 'MMMM')}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
+                </motion.div>
+                <ShortcutInput listening={listening} />
+            </div>
             <NextButton />
         </div>
     )

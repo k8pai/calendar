@@ -18,7 +18,7 @@ interface CalendarState {
 const initialState: CalendarState = {
     selectedDate: new Date().toISOString(), // Stores the currently selected date
     events: [], // Array to store calendar events
-    viewMode: viewModes.DAY, // Options: 'day', 'week', 'month', 'year'
+    viewMode: viewModes.MONTH, // Options: 'day', 'week', 'month', 'year'
     filters: {}, // Stores any applied filters (e.g., event types)
 }
 

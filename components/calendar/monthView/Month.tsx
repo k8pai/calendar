@@ -2,21 +2,12 @@
 
 import Day from '@/components/calendar/monthView/day'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
-import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { getSelectedMonthDays } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
-import { setSelectedDate } from '@/slices/calendarSlice'
-import {
-    addDays,
-    eachDayOfInterval,
-    endOfMonth,
-    format,
-    getDay,
-    isSameMonth,
-    startOfMonth,
-    subDays,
-} from 'date-fns'
+import { format } from 'date-fns'
 import { motion } from 'motion/react'
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 
 interface CalendarProps {
     view?: string
@@ -32,142 +23,26 @@ let events = {
 }
 
 const Month: React.FC<CalendarProps> = ({ view }) => {
-    const dispatch = useAppDispatch()
+    const { selectedDate } = useAppSelector((state) => state.calendar)
+    const { lastAction } = useCalendarAction()
 
-    const { selectedDate, events } = useAppSelector((state) => state.calendar)
-    const { goToPreviousMonth, goToNextMonth } = useCalendarAction()
+    const allDays = useMemo(
+        () => getSelectedMonthDays(selectedDate),
+        [selectedDate]
+    )
 
-    // TODO: Implement the logic to render the calendar grid based on the provided view and current date
-    const [movedTo, setMovedTo] = useState<'P' | 'N' | null>(null)
-
-    const firstDayOfMonth = startOfMonth(selectedDate)
-    const lastDayOfMonth = endOfMonth(selectedDate)
-
-    const firstDayWeekday = getDay(firstDayOfMonth) // 0 for Sunday, 1 for Monday, etc.
-    const lastDayWeekday = getDay(lastDayOfMonth) // 0 for Sunday, 1 for Monday, etc.
-
-    const daysInPreviousMonth =
-        firstDayWeekday > 0
-            ? eachDayOfInterval({
-                  start: subDays(firstDayOfMonth, firstDayWeekday),
-                  end: subDays(firstDayOfMonth, 1),
-              })
-            : []
-
-    const daysInCurrentMonth = eachDayOfInterval({
-        start: firstDayOfMonth,
-        end: lastDayOfMonth,
-    })
-
-    // Calculate the remaining days to fill the last row (so that the grid is 6 rows of 7 columns)
-    const remainingDays = 6 - lastDayWeekday
-    const daysInNextMonth =
-        remainingDays > 0
-            ? eachDayOfInterval({
-                  start: addDays(lastDayOfMonth, 1),
-                  end: addDays(lastDayOfMonth, remainingDays),
-              })
-            : []
-
-    const allDays = [
-        ...daysInPreviousMonth,
-        ...daysInCurrentMonth,
-        ...daysInNextMonth,
-    ]
-    // Example implementation:
-
-    const resetDate = () => {
-        if (isSameMonth(new Date(), selectedDate)) {
-            return
-        }
-        setMovedTo(null)
-
-        dispatch(setSelectedDate(new Date().toISOString()))
-    }
-
-    // useEffect(() => {
-    //     const handleKeyDown = (event: KeyboardEvent) => {
-    //         if (event.key === 'ArrowRight') {
-    //             goToNextMonth()
-    //         } else if (event.key === 'ArrowLeft') {
-    //             goToPreviousMonth()
-    //         }
-    //     }
-
-    //     window.addEventListener('keydown', handleKeyDown)
-    //     return () => {
-    //         window.removeEventListener('keydown', handleKeyDown)
-    //     }
-    // }, [goToNextMonth, goToPreviousMonth])
-
+    console.log('this got rerendered...')
     return (
         <div className="flex-1 flex flex-col transition-all overflow-hidden">
-            {/* <div className="mb-4 flex justify-between items-center space-x-2">
-                <Button
-                    className="group transition-all cursor-pointer"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => goToPreviousMonth()}
-                >
-                    <ChevronLeft className="group-hover:scale-110" />
-                </Button>
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    key={format(selectedDate, 'MMMM yyyy')}
-                    className="flex items-center space-x-2"
-                >
-                    <span className="text-center font-bold uppercase">
-                        {format(selectedDate, 'MMMM yyyy')}
-                    </span>
-
-                    {!isSameMonth(selectedDate, new Date()) && (
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        className="group transition-all cursor-pointer"
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() => resetDate()}
-                                    >
-                                        <RotateCcw />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent
-                                    side="top"
-                                    avoidCollisions={true}
-                                >
-                                    <p>Go To {format(new Date(), 'MMMM')}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    )}
-                </motion.div>
-                <Button
-                    className="group transition-all cursor-pointer"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => goToNextMonth()}
-                >
-                    <ChevronRight className="group-hover:scale-110" />
-                </Button>
-            </div> */}
-
             <motion.div
                 className={cn(`grid grid-cols-7 gap-1 border-b-0 `)}
-                key={format(selectedDate, 'ddMMMMuuuu') + ' - ' + 'header'}
+                key={format(selectedDate, 'MMMM') + ' - ' + 'header'}
                 initial={{
                     opacity: 0,
                     transform: `translateX(${
-                        movedTo === 'P'
+                        lastAction === 'P'
                             ? '-20%'
-                            : movedTo === 'N'
+                            : lastAction === 'N'
                             ? '20%'
                             : '0%'
                     })`,
@@ -203,13 +78,13 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
                     Math.floor(allDays.length / 7) === 5 &&
                         'grid-rows-[repeat(5,minmax(0,1fr))]'
                 )}
-                key={format(selectedDate, 'ddMMMMuuuu') + ' - ' + 'body'}
+                key={`${format(selectedDate, 'MMMMuuuu')}-header`}
                 initial={{
                     opacity: 0,
                     transform: `translateX(${
-                        movedTo === 'P'
+                        lastAction === 'P'
                             ? '-20%'
-                            : movedTo === 'N'
+                            : lastAction === 'N'
                             ? '20%'
                             : '0%'
                     })`,
