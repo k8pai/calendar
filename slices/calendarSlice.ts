@@ -8,11 +8,14 @@ interface CalendarEvent {
     description?: string
 }
 
+export type calendarTypes = 'gregorian' | 'julian'
+
 interface CalendarState {
     selectedDate: string
     events: CalendarEvent[]
     viewMode: calendarViewModeTypes
     filters: Record<string, string | number>
+    calendarType: calendarTypes
 }
 
 const initialState: CalendarState = {
@@ -20,12 +23,16 @@ const initialState: CalendarState = {
     events: [], // Array to store calendar events
     viewMode: viewModes.MONTH, // Options: 'day', 'week', 'month', 'year'
     filters: {}, // Stores any applied filters (e.g., event types)
+    calendarType: 'gregorian', // Options: 'gregorian', 'julian'
 }
 
 const calendarSlice = createSlice({
     name: 'calendar',
     initialState,
     reducers: {
+        setCalendarType: (state, action) => {
+            state.calendarType = action.payload
+        },
         setSelectedDate: (state, action) => {
             state.selectedDate = action.payload
         },
@@ -56,6 +63,7 @@ const calendarSlice = createSlice({
 })
 
 export const {
+    setCalendarType,
     setSelectedDate,
     addEvent,
     updateEvent,

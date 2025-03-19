@@ -1,6 +1,11 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
-import { setSelectedDate, setViewMode } from '@/slices/calendarSlice'
+import {
+    calendarTypes,
+    setCalendarType,
+    setSelectedDate,
+    setViewMode,
+} from '@/slices/calendarSlice'
 import {
     setKeystrokeListener,
     toggleKeystrokeListener,
@@ -204,6 +209,10 @@ export const useCalendarAction = () => {
         }
     }
 
+    const setCalType = (calendarType: calendarTypes) => {
+        dispatch(setCalendarType(calendarType))
+    }
+
     return {
         lastAction: prev,
         goToPreviousDay,
@@ -225,5 +234,6 @@ export const useCalendarAction = () => {
         setYearView,
         toggleKeystroke,
         setKeystroke,
+        setCalendarType: setCalType,
     }
 }
