@@ -84,7 +84,6 @@ export const useCalendarAction = () => {
     }
 
     const goToPreviousMonth = (cb?: Function) => {
-        console.log('prevMonth is ', selectedDate)
         dispatch(
             setSelectedDate(subMonths(new Date(selectedDate), 1).toISOString())
         )
@@ -146,27 +145,18 @@ export const useCalendarAction = () => {
     const previous = (cb?: Function) => {
         switch (calendarViewMode) {
             case viewModes.DAY:
-                console.log('goToPreviousDay')
-
                 goToPreviousDay(cb)
                 break
             case viewModes.WEEK:
-                console.log('goToPreviousWeek')
-
                 goToPreviousWeek(cb)
                 break
             case viewModes.MONTH:
-                console.log('goToPreviousMonth')
-
                 goToPreviousMonth(cb)
                 break
             case viewModes.YEAR:
-                console.log('goToPreviousYear')
-
                 goToPreviousYear(cb)
                 break
             default:
-                console.log('default issue...')
                 break
         }
     }
@@ -174,19 +164,15 @@ export const useCalendarAction = () => {
     const next = (cb?: Function) => {
         switch (calendarViewMode) {
             case viewModes.DAY:
-                console.log('gotoNextDay')
                 goToNextDay(cb)
                 break
             case viewModes.WEEK:
-                console.log('goToNextWeek')
                 goToNextWeek(cb)
                 break
             case viewModes.MONTH:
-                console.log('goToNextMonth')
                 goToNextMonth(cb)
                 break
             case viewModes.YEAR:
-                console.log('goToNextYear')
                 goToNextYear(cb)
                 break
             default:
