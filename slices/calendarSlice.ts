@@ -1,5 +1,5 @@
 import { viewModes } from '@/lib/constants'
-import { calendarViewModeTypes } from '@/types/calendarTypes'
+import { CalendarModeType, ViewModeType } from '@/types/calendarTypes'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface CalendarEvent {
     id: string
@@ -8,14 +8,12 @@ interface CalendarEvent {
     description?: string
 }
 
-export type calendarTypes = 'gregorian' | 'julian'
-
 interface CalendarState {
     selectedDate: string
     events: CalendarEvent[]
-    viewMode: calendarViewModeTypes
+    viewMode: ViewModeType
     filters: Record<string, string | number>
-    calendarType: calendarTypes
+    calendarType: CalendarModeType
 }
 
 const initialState: CalendarState = {

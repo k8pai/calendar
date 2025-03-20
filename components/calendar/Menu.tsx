@@ -4,34 +4,44 @@ import {
     Menubar,
     MenubarContent,
     MenubarItem,
+    MenubarLabel,
     MenubarMenu,
     MenubarSeparator,
     MenubarShortcut,
     MenubarTrigger,
 } from '@/components/ui/menubar'
+import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 const Menu = () => {
     const { viewMode } = useAppSelector((state) => state.calendar)
+    const {
+        previous,
+        next,
+        setDayView,
+        setWeekView,
+        setYearView,
+        setMonthView,
+        toggleKeystroke,
+        reset,
+    } = useCalendarAction()
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (
-            ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(
-                event.key
-            )
-        ) {
-            console.log('idhil ind tta...', event.key)
-            event.preventDefault() // Prevent focus movement
+        if (event.key === 'ArrowLeft') {
+            previous()
+        } else if (event.key === 'ArrowRight') {
+            next()
         }
+        event.stopPropagation()
     }
 
     return (
         <div>
-            <Menubar className="w-fit" onKeyDown={handleKeyDown}>
-                <MenubarMenu>
-                    <MenubarTrigger data-state>File</MenubarTrigger>
-                    <MenubarContent>
+            <Menubar className="w-fit" onKeyDownCapture={handleKeyDown}>
+                {/* <MenubarMenu>
+                    <MenubarTrigger>File</MenubarTrigger>
+                    <MenubarContent onKeyDown={handleKeyDown}>
                         <MenubarItem
                             onMouseEnter={(e) => e.currentTarget.focus()}
                         >
@@ -55,41 +65,52 @@ const Menu = () => {
                             Print
                         </MenubarItem>
                     </MenubarContent>
-                </MenubarMenu>
+                </MenubarMenu> */}
 
                 <MenubarMenu>
                     <MenubarTrigger>Shortcuts</MenubarTrigger>
-                    <MenubarContent>
-                        <MenubarItem>
+                    <MenubarContent onKeyDown={handleKeyDown}>
+                        <MenubarLabel>Views</MenubarLabel>
+                        <MenubarItem onClick={() => setYearView()}>
                             Year View <MenubarShortcut>y</MenubarShortcut>
                         </MenubarItem>
-                        <MenubarItem>
+                        <MenubarItem onClick={() => setMonthView()}>
                             Month View <MenubarShortcut>m</MenubarShortcut>
                         </MenubarItem>
-                        <MenubarItem>
+                        <MenubarItem onClick={() => setWeekView()}>
                             Week View <MenubarShortcut>w</MenubarShortcut>
                         </MenubarItem>
-                        <MenubarItem>
+                        <MenubarItem onClick={() => setDayView()}>
                             Day View <MenubarShortcut>d</MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarSeparator />
+                        <MenubarLabel>Navigation</MenubarLabel>
+                        <MenubarItem onClick={() => toggleKeystroke()}>
+                            Toggle Search <MenubarShortcut>k</MenubarShortcut>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
 
                 <MenubarMenu>
                     <MenubarTrigger>Goto</MenubarTrigger>
-                    <MenubarContent>
-                        <MenubarItem>
+                    <MenubarContent onKeyDown={handleKeyDown}>
+                        <MenubarItem onClick={() => previous()}>
                             Previous {viewMode}{' '}
                             <MenubarShortcut>
                                 <ArrowLeft />
                             </MenubarShortcut>
                         </MenubarItem>
 
-                        <MenubarItem>
+                        <MenubarItem onClick={() => next()}>
                             Next {viewMode}{' '}
                             <MenubarShortcut>
                                 <ArrowRight />
                             </MenubarShortcut>
+                        </MenubarItem>
+
+                        <MenubarItem onClick={() => reset()}>
+                            Today
+                            <MenubarShortcut>r</MenubarShortcut>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>

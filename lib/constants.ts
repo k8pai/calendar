@@ -1,23 +1,11 @@
-interface viewModesType {
-    DAY: 'day'
-    WEEK: 'week'
-    MONTH: 'month'
-    YEAR: 'year'
-}
-
-export const viewModes: viewModesType = {
+export const viewModes = {
     DAY: 'day',
     WEEK: 'week',
     MONTH: 'month',
     YEAR: 'year',
-}
+} as const
 
-export type calendarViewModeTypes = {
-    label: string
-    value: string
-}
-
-export const calendarTypes: Array<calendarViewModeTypes> = [
+export const calendarTypes = [
     {
         label: 'Gregorian',
         value: 'gregorian',
@@ -30,7 +18,9 @@ export const calendarTypes: Array<calendarViewModeTypes> = [
         label: 'Julian',
         value: 'julian',
     },
-]
+] as const
+
 export default {
     viewModes,
+    calendarTypes,
 }
