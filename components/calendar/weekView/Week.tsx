@@ -83,7 +83,7 @@ const Week: React.FC<CalendarProps> = ({ view }) => {
                     opacity: 1,
                     transform: 'translateX(0%)',
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.1 }}
             >
                 {WEEKDAYS.map((weekday, index) => {
                     return (
@@ -125,7 +125,7 @@ const Week: React.FC<CalendarProps> = ({ view }) => {
                     opacity: 1,
                     transform: 'translateX(0%)',
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.1 }}
             >
                 {allDays.map((day, index) => {
                     return (

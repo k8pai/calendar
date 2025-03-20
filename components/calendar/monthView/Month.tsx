@@ -31,7 +31,6 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
         [selectedDate]
     )
 
-    console.log('this got rerendered...')
     return (
         <div className="flex-1 flex flex-col transition-all overflow-hidden">
             <motion.div
@@ -51,7 +50,7 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
                     opacity: 1,
                     transform: 'translateX(0%)',
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.1 }}
             >
                 {WEEKDAYS.map((weekday, index) => {
                     return (
@@ -93,15 +92,14 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
                     opacity: 1,
                     transform: 'translateX(0%)',
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.1 }}
             >
                 {allDays.map((day, index) => {
                     return (
                         <Day
                             day={day}
                             index={index}
-                            events={[]}
-                            key={`${format(day, 'ddMMuuuu')}${index}}`}
+                            key={`${format(day, 'ddMMuuuu')}}`}
                         />
                     )
                 })}

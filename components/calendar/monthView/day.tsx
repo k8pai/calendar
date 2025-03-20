@@ -25,12 +25,12 @@ interface calendarEventType {
 interface CalendarProps {
     day: Date
     index: number
-    events: Array<calendarEventType>
+    events?: Array<calendarEventType>
     type?: string
 }
 
 const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
-    const [dailyEvents, setDailyEvents] = useState(events)
+    const [dailyEvents, setDailyEvents] = useState<Array<calendarEventType>>([])
 
     const { selectedDate } = useAppSelector((state) => state.calendar)
     const { setDate } = useCalendarAction()
@@ -60,8 +60,6 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
         })
     }
 
-    console.log('some props changed...')
-
     return (
         <ContextMenu>
             <ContextMenuTrigger asChild>
@@ -81,7 +79,7 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
                     animate={{
                         opacity: 1,
                     }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.1 }}
                 >
                     {isEqual(
                         format(day, 'dd-MMMM-uuuu'),

@@ -27,7 +27,7 @@ const Day: React.FC<CalendarProps> = ({ view }) => {
                 animate={{
                     opacity: 1,
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.1 }}
             >
                 <div
                     className={cn(

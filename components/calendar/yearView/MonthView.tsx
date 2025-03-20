@@ -88,7 +88,7 @@ const MonthView: React.FC<CalendarProps> = ({ monthDate, selectedDate }) => {
                 animate={{
                     opacity: 1,
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.1 }}
             >
                 {WEEKDAYS.map((weekday, index) => {
                     return (
@@ -121,7 +121,7 @@ const MonthView: React.FC<CalendarProps> = ({ monthDate, selectedDate }) => {
                 animate={{
                     opacity: 1,
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.1 }}
             >
                 {allDays.map((day, index) => {
                     return (
