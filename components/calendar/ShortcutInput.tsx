@@ -50,27 +50,13 @@ const ShortcutInput = ({ listening }: ShortcutInputProps) => {
         }
     }, [listen])
 
-    useEffect(() => {
-        console.log('value of searchable', searchable)
-    }, [searchable])
-
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchable(e.target.value)
 
         let date = parse(searchable, 'dd/MM/uuuu', new Date())
-        // if()
-        console.log(
-            'date : ',
-            date,
-            new Date(date),
-            typeof date,
-            isValid(new Date(searchable)),
-            isValid(date)
-        )
     }
 
     const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
-        console.log('search : ', e)
         if (e.key === 'Enter') {
             // let date = parse(searchable, 'dd/MM/uuuu', new Date())
             // let date = new Date(searchable)
@@ -94,12 +80,33 @@ const ShortcutInput = ({ listening }: ShortcutInputProps) => {
                 inputRef.current?.blur()
                 setKeystroke(false)
             } else {
-                toast('Date is not valid.')
+                toast.error('Date is not valid.')
             }
         }
     }
 
-    console.log('this rendered... ')
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            // if (listen)
+            if (
+                inputRef.current &&
+                !inputRef.current.contains(event.target as Node)
+            ) {
+                inputRef.current?.blur()
+                setKeystroke(false)
+                setSearchable('')
+                inputRef.current?.focus()
+            }
+        }
+
+        if (listen) {
+            document.addEventListener('mousedown', handleClickOutside)
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside)
+            }
+        }
+    }, [listen])
+
     return (
         <motion.div
             initial={{
