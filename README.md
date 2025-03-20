@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Calendar Application
 
-## Getting Started
+## Overview
+A simple and efficient calendar application with keyboard shortcuts for seamless navigation between different views.
 
-First, run the development server:
+## Features
+- Navigate between day, week, month, and year views using shortcut keys.
+- Quick access to specific dates via a search input.
+- Easily switch between previous and next time frames.
 
+## Installation
+
+Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/k8pai/calendar
+cd calendar
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run the application:
+```bash
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Keyboard Shortcuts
+| Shortcut      | Action |
+|--------------|--------|
+| `d`          | Switch to Day Mode |
+| `m`          | Switch to Month Mode |
+| `y`          | Switch to Year Mode |
+| `w`          | Switch to Week Mode |
+| `← (Left Arrow)` | Navigate to the previous day/week/month/year based on current view |
+| `→ (Right Arrow)` | Navigate to the next day/week/month/year based on current view |
+| `k`          | Open the date search input to jump to a specific date |
 
-## Learn More
+## Usage
+- Press `d`, `m`, `y`, or `w` to switch between views.
+- Use the left and right arrow keys to move between time frames.
+- Press `k` to quickly search and jump to a specific date.
 
-To learn more about Next.js, take a look at the following resources:
+## License
+This project is licensed under the MIT License.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
