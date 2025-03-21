@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import {
-    calendarTypes,
     setCalendarType,
     setSelectedDate,
     setViewMode,
@@ -10,6 +9,7 @@ import {
     setKeystrokeListener,
     toggleKeystrokeListener,
 } from '@/slices/keyboardSlice'
+import { CalendarModeType } from '@/types/calendarTypes'
 import {
     addDays,
     addMonths,
@@ -195,7 +195,7 @@ export const useCalendarAction = () => {
         }
     }
 
-    const setCalType = (calendarType: calendarTypes) => {
+    const setCalType = (calendarType: CalendarModeType) => {
         dispatch(setCalendarType(calendarType))
     }
 
