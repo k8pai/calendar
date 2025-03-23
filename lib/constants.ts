@@ -1,3 +1,5 @@
+import { format, set } from 'date-fns'
+
 export const viewModes = {
     DAY: 'day',
     WEEK: 'week',
@@ -20,7 +22,17 @@ export const calendarTypes = [
     },
 ] as const
 
+export const MONTHS = Array.from({ length: 12 }, (_, i) =>
+    format(
+        set(new Date(), {
+            month: i,
+        }),
+        'MMMM'
+    )
+)
+
 export default {
     viewModes,
     calendarTypes,
+    MONTHS,
 }
