@@ -9,7 +9,7 @@ import { store } from './store'
 const ShortcutProvider = ({ children }: { children: ReactNode }) => {
     const dispatch = useAppDispatch()
 
-    const { listening } = useAppSelector((state) => state.keystroke)
+    const { commandMode } = useAppSelector((state) => state.calendar)
 
     const {
         previous,
@@ -19,55 +19,50 @@ const ShortcutProvider = ({ children }: { children: ReactNode }) => {
         setMonthView,
         setYearView,
         reset,
-        toggleKeystroke,
-        setKeystroke,
+        setCommandFlag,
+        toggleCommandFlag,
     } = useCalendarAction()
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
                 case 'ArrowLeft':
-                    if (!listening) {
+                    if (!commandMode) {
                         previous()
                     }
                     break
                 case 'ArrowRight':
-                    if (!listening) {
+                    if (!commandMode) {
                         next()
                     }
                     break
                 case 'd':
-                    if (!listening) {
+                    if (!commandMode) {
                         setDayView()
                     }
                     break
                 case 'w':
-                    if (!listening) {
+                    if (!commandMode) {
                         setWeekView()
                     }
                     break
                 case 'm':
-                    if (!listening) {
+                    if (!commandMode) {
                         setMonthView()
                     }
                     break
                 case 'y':
-                    if (!listening) {
+                    if (!commandMode) {
                         setYearView()
                     }
                     break
                 case 'r':
-                    if (!listening) {
+                    if (!commandMode) {
                         reset()
                     }
                     break
-                case 'k':
-                    event.preventDefault()
-                    toggleKeystroke()
-                    break
-
                 case 'Escape':
-                    setKeystroke(false)
+                    setCommandFlag(false)
                     break
                 default:
                     break

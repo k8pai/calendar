@@ -23,7 +23,7 @@ const Menu = () => {
         setWeekView,
         setYearView,
         setMonthView,
-        toggleKeystroke,
+        toggleCommandFlag,
         reset,
     } = useCalendarAction()
 
@@ -85,7 +85,7 @@ const Menu = () => {
                         </MenubarItem>
                         <MenubarSeparator />
                         <MenubarLabel>Navigation</MenubarLabel>
-                        <MenubarItem onClick={() => toggleKeystroke()}>
+                        <MenubarItem onClick={() => toggleCommandFlag()}>
                             Toggle Search <MenubarShortcut>k</MenubarShortcut>
                         </MenubarItem>
                     </MenubarContent>

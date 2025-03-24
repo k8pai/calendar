@@ -2,13 +2,11 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import {
     setCalendarType,
+    setCommandMode,
     setSelectedDate,
     setViewMode,
+    toggleCommandMode,
 } from '@/slices/calendarSlice'
-import {
-    setKeystrokeListener,
-    toggleKeystrokeListener,
-} from '@/slices/keyboardSlice'
 import { CalendarModeType } from '@/types/calendarTypes'
 import {
     addDays,
@@ -29,13 +27,13 @@ export const useCalendarAction = () => {
     const dispatch = useAppDispatch()
     const [prev, setPrev] = useState<'P' | 'N' | null>(null)
 
-    const { viewMode: calendarViewMode } = useAppSelector(
-        (state) => state.calendar
-    )
+    const {
+        viewMode: calendarViewMode,
+        commandMode,
+        selectedDate,
+    } = useAppSelector((state) => state.calendar)
 
     const { listening } = useAppSelector((state) => state.keystroke)
-
-    const { selectedDate } = useAppSelector((state) => state.calendar)
 
     const reset = (cb?: Function) => {
         dispatch(setSelectedDate(new Date().toISOString()))
@@ -133,13 +131,13 @@ export const useCalendarAction = () => {
         dispatch(setViewMode(viewModes.YEAR))
     }
 
-    const toggleKeystroke = () => {
-        dispatch(toggleKeystrokeListener(listening))
+    const setCommandFlag = (flag: boolean) => {
+        if (commandMode === flag) return
+        dispatch(setCommandMode(flag))
     }
 
-    const setKeystroke = (ks: boolean) => {
-        if (listening === ks) return
-        dispatch(setKeystrokeListener(ks))
+    const toggleCommandFlag = () => {
+        dispatch(toggleCommandMode())
     }
 
     const previous = (cb?: Function) => {
@@ -218,8 +216,8 @@ export const useCalendarAction = () => {
         setWeekView,
         setMonthView,
         setYearView,
-        toggleKeystroke,
-        setKeystroke,
         setCalendarType: setCalType,
+        setCommandFlag,
+        toggleCommandFlag,
     }
 }

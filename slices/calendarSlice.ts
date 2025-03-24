@@ -14,6 +14,7 @@ interface CalendarState {
     viewMode: ViewModeType
     filters: Record<string, string | number>
     calendarType: CalendarModeType
+    commandMode: boolean
 }
 
 const initialState: CalendarState = {
@@ -22,12 +23,19 @@ const initialState: CalendarState = {
     viewMode: viewModes.MONTH, // Options: 'day', 'week', 'month', 'year'
     filters: {}, // Stores any applied filters (e.g., event types)
     calendarType: 'gregorian', // Options: 'gregorian', 'julian'
+    commandMode: false,
 }
 
 const calendarSlice = createSlice({
     name: 'calendar',
     initialState,
     reducers: {
+        setCommandMode: (state, action) => {
+            state.commandMode = action.payload
+        },
+        toggleCommandMode: (state) => {
+            state.commandMode = !state.commandMode
+        },
         setCalendarType: (state, action) => {
             state.calendarType = action.payload
         },
@@ -61,6 +69,8 @@ const calendarSlice = createSlice({
 })
 
 export const {
+    setCommandMode,
+    toggleCommandMode,
     setCalendarType,
     setSelectedDate,
     addEvent,
