@@ -33,8 +33,6 @@ export const useCalendarAction = () => {
         selectedDate,
     } = useAppSelector((state) => state.calendar)
 
-    const { listening } = useAppSelector((state) => state.keystroke)
-
     const reset = (cb?: Function) => {
         dispatch(setSelectedDate(new Date().toISOString()))
         setPrev('P')

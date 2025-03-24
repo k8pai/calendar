@@ -36,19 +36,20 @@ const ShortcutInput = ({ listening }: ShortcutInputProps) => {
 
     const [searchable, setSearchable] = useState<string>('')
 
-    const { setDate, setKeystroke } = useCalendarAction()
+    const { setDate, setCommandFlag } = useCalendarAction()
 
-    const { listening: listen } = useAppSelector((state) => state.keystroke)
-    const { selectedDate } = useAppSelector((state) => state.calendar)
+    const { selectedDate, commandMode } = useAppSelector(
+        (state) => state.calendar
+    )
 
     useEffect(() => {
-        if (listen && inputRef.current) {
+        if (commandMode && inputRef.current) {
             inputRef.current.focus()
             setSearchable('')
         } else {
             inputRef.current?.blur()
         }
-    }, [listen])
+    }, [commandMode])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchable(e.target.value)
@@ -78,7 +79,7 @@ const ShortcutInput = ({ listening }: ShortcutInputProps) => {
             if (validDate) {
                 setDate(validDate)
                 inputRef.current?.blur()
-                setKeystroke(false)
+                setCommandFlag(false)
             } else {
                 toast.error('Date is not valid.')
             }
@@ -87,25 +88,25 @@ const ShortcutInput = ({ listening }: ShortcutInputProps) => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // if (listen)
+            // if (commandMode)
             if (
                 inputRef.current &&
                 !inputRef.current.contains(event.target as Node)
             ) {
                 inputRef.current?.blur()
-                setKeystroke(false)
                 setSearchable('')
                 inputRef.current?.focus()
+                setCommandFlag(false)
             }
         }
 
-        if (listen) {
+        if (commandMode) {
             document.addEventListener('mousedown', handleClickOutside)
             return () => {
                 document.removeEventListener('mousedown', handleClickOutside)
             }
         }
-    }, [listen])
+    }, [commandMode])
 
     return (
         <motion.div
@@ -113,10 +114,10 @@ const ShortcutInput = ({ listening }: ShortcutInputProps) => {
                 opacity: 0,
             }}
             animate={{
-                opacity: listening ? 1 : 0,
-                top: listening ? '50%' : '50%',
+                opacity: commandMode ? 1 : 0,
+                top: commandMode ? '50%' : '50%',
                 transform: `${
-                    listening ? 'translateY(-50%)' : 'translateY(0%)'
+                    commandMode ? 'translateY(-50%)' : 'translateY(0%)'
                 }`,
             }}
             transition={{ duration: 0.2 }}
