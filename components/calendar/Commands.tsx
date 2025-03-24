@@ -279,12 +279,9 @@ export function CommandMenu() {
                                     </CommandItem>
                                 )
                             })}
-                            <CommandItem>Search Emoji</CommandItem>
-                            <CommandItem>Emoji Search</CommandItem>
-                            <CommandItem>Calculator</CommandItem>
                             {getPossibleDateSets.map((date, index) => {
                                 return (
-                                    <CommandItem key={index} value={date}>
+                                    <CommandItem key={date}>
                                         Go To {date}
                                     </CommandItem>
                                 )
