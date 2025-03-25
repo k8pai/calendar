@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
-import { MONTHS, viewModes } from '@/lib/constants'
+import { viewModes } from '@/lib/constants'
 import { isSubString } from '@/lib/helpers'
 import { ViewModeType } from '@/types/calendarTypes'
 import { format, isValid, parse, set } from 'date-fns'
@@ -20,69 +20,45 @@ import { motion } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 
 const dateFormats = [
-    // 'd',
     'dd',
     'LL',
     'LLL',
     'LLLL',
-    // 'uuuu',
-    // 'yyyy',
-    // 'd M',
-    // 'd MM',
-    // 'd MMM',
-    // 'd MMMM',
-    // 'dd M',
-    // 'dd MM',
-    // 'dd MMM',
-    // 'dd MMMM',
-    // 'MM',
-    // 'MMM',
-    // 'MMMM',
-    // 'LL',
-    // 'LLL',
-    // 'LLLL',
-    // 'uuuu',
-    // 'yyyy',
-    // 'd M uuuu',
-    // 'd MM uuuu',
-    // 'd MMM uuuu',
-    // 'd MMMM uuuu',
-    // 'dd M uuuu',
-    // 'dd MM uuuu',
-    // 'dd MMM uuuu',
-    // 'dd MMMM uuuu',
-] as const
-
-const dateMonthCombo = [
-    'd',
-    'dd',
-    'd M',
-    'd MM',
-    'd MMM',
-    'd MMMM',
+    'uuuu',
+    'yyyy',
     'dd M',
     'dd MM',
     'dd MMM',
     'dd MMMM',
-]
-interface DateConfigs {
-    date?: number
-    month?: number
-    year?: number
-}
+    'd M uuuu',
+    'd MM uuuu  ',
+    'd MMM uuuu',
+    'd MMMM uuuu',
+    'dd M uuuu',
+    'dd MM uuuu',
+    'dd MMM uuuu',
+    'dd MMMM uuuu',
+] as const
 
 export function CommandMenu() {
     const [command, setCommand] = useState('')
     const { selectedDate, viewMode, commandMode } = useAppSelector(
         (state) => state.calendar
     )
+
+    const [possibleDates, setPossibleDates] = useState<
+        Record<string, (typeof dateFormats)[number]>
+    >({})
+
     const {
         reset,
+        setDate,
         setMonthView,
         setDayView,
         setYearView,
         setWeekView,
         toggleCommandFlag,
+        setWeekendsView,
     } = useCalendarAction()
 
     const viewSuggestions = useMemo(
@@ -134,16 +110,23 @@ export function CommandMenu() {
                     toggleCommand()
                 },
             },
+            {
+                label: 'Weekends',
+                value: 'weekends',
+                isValid: () => true,
+                handler: () => {
+                    setWeekendsView()
+                    toggleCommand()
+                },
+            },
         ],
         [selectedDate]
     )
 
     const getDateVariations = (
         date: Date,
-        strFormat: (typeof dateFormats)[number],
-        dateSet: Record<string, (typeof dateFormats)[number]>
+        strFormat: (typeof dateFormats)[number]
     ) => {
-        let response: Record<string, (typeof dateFormats)[number]> = {}
         Array.from({ length: 12 }, (_, i) => {
             let finalDate = set(selectedDate, {
                 month: i,
@@ -151,72 +134,91 @@ export function CommandMenu() {
             })
 
             let formattedDate = format(finalDate, 'dd MMMM uuuu')
-            if (!response[formattedDate]) response[formattedDate] = strFormat
+            setPossibleDates((ref) => {
+                if (!ref[formattedDate]) {
+                    return {
+                        ...ref,
+                        [formattedDate]: strFormat,
+                    }
+                }
+                return ref
+            })
         })
-        return response
-    }
-
-    const getMonthVariations = () => {
-        // for checking presence of the
-        let response: Record<string, boolean> = {}
-        MONTHS.filter((iter, index) => {
-            if (iter.toLowerCase().startsWith(command.toLowerCase())) {
-                console.log('command => ', command, iter)
-                let finalDate = set(selectedDate, {
-                    month: index,
-                })
-
-                let formattedDate = format(finalDate, 'dd MMMM uuuu')
-
-                if (!response[formattedDate]) response[formattedDate] = true
-            }
-        })
-
-        return Object.keys(response)
     }
 
     const getPossibleDateSets = () => {
-        let dateSet: Record<string, (typeof dateFormats)[number]> = {}
-        let dateVariants: Record<string, (typeof dateFormats)[number]> = {}
         for (let stringFormat of dateFormats) {
             let date = parse(command, stringFormat, new Date(selectedDate))
 
-            console.log('date and validations : ', date, stringFormat)
             if (isValid(date)) {
-                console.log('date is follows...', format(date, 'dd-mm-yyyy'))
-                dateVariants = getDateVariations(date, stringFormat, dateSet)
-                console.log(
-                    'date variations for ' + stringFormat + ': ',
-                    dateVariants,
-                    stringFormat
-                )
-                let finalDate = set(selectedDate, {
-                    date: date.getDate(),
-                    month: date.getMonth(),
-                    year: date.getFullYear(),
-                })
-                let formattedDate = format(finalDate, 'dd MMMM uuuu')
-                if (!dateSet[formattedDate])
-                    dateSet[formattedDate] = stringFormat
+                if (stringFormat === 'dd') {
+                    getDateVariations(date, stringFormat)
+                }
+
+                if (
+                    stringFormat === 'LL' ||
+                    stringFormat === 'LLL' ||
+                    stringFormat === 'LLLL'
+                ) {
+                    let finalDate = set(selectedDate, {
+                        month: date.getMonth(),
+                    })
+
+                    let formattedDate = format(finalDate, 'dd MMMM uuuu')
+
+                    setPossibleDates((ref) => {
+                        if (!ref[formattedDate]) {
+                            return {
+                                ...ref,
+                                [formattedDate]: stringFormat,
+                            }
+                        }
+                        return ref
+                    })
+                } else if (stringFormat === 'uuuu' || stringFormat === 'yyyy') {
+                    let finalDate = set(selectedDate, {
+                        year: date.getFullYear(),
+                    })
+
+                    let formattedDate = format(finalDate, 'dd MMMM uuuu')
+
+                    setPossibleDates((ref) => {
+                        if (!ref[formattedDate]) {
+                            return {
+                                ...ref,
+                                [formattedDate]: stringFormat,
+                            }
+                        }
+                        return ref
+                    })
+                } else {
+                    let finalDate = set(selectedDate, {
+                        date: date.getDate(),
+                        month: date.getMonth(),
+                        year: date.getFullYear(),
+                    })
+
+                    let formattedDate = format(finalDate, 'dd MMMM uuuu')
+
+                    setPossibleDates((ref) => {
+                        if (!ref[formattedDate]) {
+                            return {
+                                ...ref,
+                                [formattedDate]: stringFormat,
+                            }
+                        }
+                        return ref
+                    })
+                }
             }
         }
-        let monthVariants = getMonthVariations()
-
-        let response = [
-            ...Object.keys(dateVariants),
-            // ...Object.keys(dateSet),
-            // ...monthVariants,
-        ]
-
-        return response
     }
 
     useEffect(() => {
         const down = (event: KeyboardEvent) => {
             if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
-                // toggleKeystroke()
+                toggleCommand()
                 event.preventDefault()
-                toggleCommandFlag()
             }
         }
         window.addEventListener('keydown', down)
@@ -229,8 +231,8 @@ export function CommandMenu() {
     }
 
     useEffect(() => {
-        console.log('getPossibleDateSets changed: ', getPossibleDateSets())
-    }, [getPossibleDateSets])
+        getPossibleDateSets()
+    }, [command])
 
     return (
         <div>
@@ -252,26 +254,7 @@ export function CommandMenu() {
             </motion.div>
 
             <CommandDialog open={commandMode} onOpenChange={toggleCommand}>
-                <Command
-                    filter={(value, search, keywords) => {
-                        let trimmedValue = value.trim().toLowerCase()
-                        let trimmedSearch = search.trim().toLowerCase()
-
-                        // TODO: some modifications needs to be done here...
-                        // ?needs to implement keywords filtering as well...
-                        // *logic goes something like this...
-                        // if (
-                        //     keywords?.some((kw) =>
-                        //         isSubString(trimmedSearch, kw)
-                        //     )
-                        // )
-                        // return 1
-
-                        if (isSubString(trimmedSearch, trimmedValue)) return 1
-
-                        return 0
-                    }}
-                >
+                <Command shouldFilter={false}>
                     <CommandInput
                         placeholder="Type a command or search..."
                         value={command}
@@ -281,39 +264,51 @@ export function CommandMenu() {
                         <CommandEmpty>No results found.</CommandEmpty>
                         <CommandGroup heading="Suggestions">
                             {viewSuggestions.map((suggestion) => {
-                                console.log(
-                                    'suggestion',
-                                    suggestion.value,
-                                    suggestion.isValid(viewMode)
-                                )
                                 if (!suggestion.isValid(viewMode)) {
                                     return null
                                 }
-                                return (
-                                    <CommandItem
-                                        key={suggestion.value}
-                                        // value={suggestion.value}
-                                        // keywords={[
-                                        //     suggestion.label,
-                                        //     // suggestion.value,
-                                        // ]}
-                                        onSelect={(value) => {
-                                            console.log('value =>', value)
-                                            suggestion.handler()
-                                        }}
-                                    >
-                                        {suggestion.label}
-                                    </CommandItem>
+
+                                if (
+                                    isSubString(
+                                        suggestion.label.trim().toLowerCase(),
+                                        command.trim().toLowerCase()
+                                    )
                                 )
+                                    return (
+                                        <CommandItem
+                                            key={suggestion.value}
+                                            onSelect={(value) => {
+                                                suggestion.handler()
+                                            }}
+                                        >
+                                            {suggestion.label}
+                                        </CommandItem>
+                                    )
                             })}
-                            {getPossibleDateSets().map((date, index) => {
-                                return (
-                                    <CommandItem
-                                        key={date.toString() + ' - ' + index}
-                                    >
-                                        Go To {date}
-                                    </CommandItem>
+                            {Object.keys(possibleDates).map((date, index) => {
+                                if (
+                                    isSubString(
+                                        `Go To ${date
+                                            .trim()
+                                            .toLowerCase()}`.toLowerCase(),
+                                        command.trim().toLowerCase()
+                                    )
                                 )
+                                    return (
+                                        <CommandItem
+                                            key={
+                                                date.toString() + ' - ' + index
+                                            }
+                                            id={date.toString()}
+                                            value={`Go To ${date}`}
+                                            onSelect={() => {
+                                                setDate(new Date(date))
+                                                toggleCommand()
+                                            }}
+                                        >
+                                            Go To {date}
+                                        </CommandItem>
+                                    )
                             })}
                         </CommandGroup>
                     </CommandList>
