@@ -19,14 +19,14 @@ const Weekends = () => {
     return (
         <div className=" p-6 shadow-lg rounded-lg">
             <h2 className="text-xl font-bold mb-4 text-center">
-                Weekends of {new Date().getFullYear()}
+                Weekends of {format(selectedDate, 'uuuu')}
             </h2>
             <div className="flex justify-between">
                 <div className="space-y-6">
                     {Object.entries(groupedWeekends).map(([month, dates]) => (
                         <div key={month} className="">
                             <h3 className="text-lg font-semibold pb-2 mb-3 sticky top-0 bg-background px-4 py-2 z-10">
-                                {month}
+                                {month} ({dates.length})
                             </h3>
                             <div className="space-y-2 pl-4 border-l border-muted">
                                 {dates.map((date, index) => (
@@ -48,6 +48,12 @@ const Weekends = () => {
                             </div>
                         </div>
                     ))}
+                </div>
+
+                <div>
+                    <h3 className="text-lg font-semibold pb-2 mb-3 sticky top-0 bg-background px-4 py-2 z-10">
+                        Filters
+                    </h3>
                 </div>
             </div>
         </div>

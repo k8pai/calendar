@@ -157,6 +157,9 @@ export const useCalendarAction = () => {
             case viewModes.YEAR:
                 goToPreviousYear(cb)
                 break
+            case viewModes.WEEKENDS:
+                goToPreviousYear(cb)
+                break
             default:
                 break
         }
@@ -174,6 +177,9 @@ export const useCalendarAction = () => {
                 goToNextMonth(cb)
                 break
             case viewModes.YEAR:
+                goToNextYear(cb)
+                break
+            case viewModes.WEEKENDS:
                 goToNextYear(cb)
                 break
             default:
