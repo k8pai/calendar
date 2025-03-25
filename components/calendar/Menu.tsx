@@ -23,6 +23,7 @@ const Menu = () => {
         setWeekView,
         setYearView,
         setMonthView,
+        setWeekendsView,
         toggleCommandFlag,
         reset,
     } = useCalendarAction()
@@ -83,10 +84,14 @@ const Menu = () => {
                         <MenubarItem onClick={() => setDayView()}>
                             Day View <MenubarShortcut>d</MenubarShortcut>
                         </MenubarItem>
+                        <MenubarItem onClick={() => setWeekendsView()}>
+                            Weekends <MenubarShortcut>d</MenubarShortcut>
+                        </MenubarItem>
                         <MenubarSeparator />
                         <MenubarLabel>Navigation</MenubarLabel>
                         <MenubarItem onClick={() => toggleCommandFlag()}>
-                            Toggle Search <MenubarShortcut>k</MenubarShortcut>
+                            Toggle Search
+                            <MenubarShortcut>⌘ + k </MenubarShortcut>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
