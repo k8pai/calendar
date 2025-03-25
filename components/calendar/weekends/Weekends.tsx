@@ -49,7 +49,6 @@ const Weekends = () => {
                         </div>
                     ))}
                 </div>
-                <div>select box</div>
             </div>
         </div>
     )
