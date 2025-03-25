@@ -2,6 +2,7 @@
 
 import Day from '@/components/calendar/dayView/Day'
 import Month from '@/components/calendar/monthView/Month'
+import Weekends from '@/components/calendar/weekends/Weekends'
 import Week from '@/components/calendar/weekView/Week'
 import Year from '@/components/calendar/yearView/Year'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
@@ -32,6 +33,10 @@ const Calendar: React.FC<CalendarProps> = ({ view }) => {
 
     if (calendarViewMode === viewModes.YEAR) {
         return <Year />
+    }
+
+    if (calendarViewMode === viewModes.WEEKENDS) {
+        return <Weekends />
     }
 }
 

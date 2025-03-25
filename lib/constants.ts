@@ -5,6 +5,7 @@ export const viewModes = {
     WEEK: 'week',
     MONTH: 'month',
     YEAR: 'year',
+    WEEKENDS: 'weekends',
 } as const
 
 export const calendarTypes = [

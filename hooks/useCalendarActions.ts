@@ -113,6 +113,7 @@ export const useCalendarAction = () => {
         }
     }
 
+    // views goes here...
     const setDayView = () => {
         dispatch(setViewMode(viewModes.DAY))
     }
@@ -127,6 +128,10 @@ export const useCalendarAction = () => {
 
     const setYearView = () => {
         dispatch(setViewMode(viewModes.YEAR))
+    }
+
+    const setWeekendsView = () => {
+        dispatch(setViewMode(viewModes.WEEKENDS))
     }
 
     const setCommandFlag = (flag: boolean) => {
@@ -214,6 +219,7 @@ export const useCalendarAction = () => {
         setWeekView,
         setMonthView,
         setYearView,
+        setWeekendsView,
         setCalendarType: setCalType,
         setCommandFlag,
         toggleCommandFlag,
