@@ -24,8 +24,6 @@ const Weekends = () => {
         return acc
     }, {} as Record<string, Array<Date>>)
 
-    console.log('filter => ', filter)
-
     return (
         <div className=" p-6 shadow-lg rounded-lg">
             <h2 className="text-xl font-bold mb-4 text-center">
