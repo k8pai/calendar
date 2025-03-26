@@ -228,12 +228,17 @@ export function CommandMenu() {
     const toggleCommand = () => {
         toggleCommandFlag()
         setCommand('')
+        setPossibleDates({})
+        console.log('this is working...')
     }
 
     useEffect(() => {
         getPossibleDateSets()
     }, [command])
 
+    useEffect(() => {
+        console.log('possibleDates are ', possibleDates)
+    }, [possibleDates])
     return (
         <div>
             <motion.div
