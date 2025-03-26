@@ -85,7 +85,7 @@ const Menu = () => {
                             Day View <MenubarShortcut>d</MenubarShortcut>
                         </MenubarItem>
                         <MenubarItem onClick={() => setWeekendsView()}>
-                            Weekends <MenubarShortcut>d</MenubarShortcut>
+                            Weekends
                         </MenubarItem>
                         <MenubarSeparator />
                         <MenubarLabel>Navigation</MenubarLabel>
