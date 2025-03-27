@@ -3,6 +3,8 @@
 import { NextButton, PrevButton } from '@/components/calendar/Actions'
 import { CommandMenu } from '@/components/calendar/Commands'
 import Menu from '@/components/calendar/Menu'
+import { Separator } from '@/components/ui/separator'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import { format } from 'date-fns'
@@ -28,8 +30,13 @@ const Header: React.FC<HeaderProps> = ({}) => {
         <div className="mb-4 flex justify-between items-center space-x-2">
             <motion.div
                 key={format(selectedDate, 'MMMM yyyy')}
-                className="flex-1 flex justify-start relative"
+                className="flex-1 flex justify-start w-full items-center gap-1 px-2 lg:gap-2 lg:px-6"
             >
+                <SidebarTrigger className="-ml-1" />
+                <Separator
+                    orientation="vertical"
+                    className="mx-2 data-[orientation=vertical]:h-4"
+                />
                 <Menu />
                 {/* <SwitchCalendar /> */}
             </motion.div>
