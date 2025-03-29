@@ -14,6 +14,7 @@ import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import { isSubString } from '@/lib/helpers'
+import { cn } from '@/lib/utils'
 import { ViewModeType } from '@/types/calendarTypes'
 import { format, isValid, parse, set } from 'date-fns'
 import { motion } from 'motion/react'
@@ -245,6 +246,7 @@ export function CommandMenu() {
                     opacity: commandMode ? 0 : 1,
                 }}
                 transition={{ duration: 0.2 }}
+                className={cn('hidden md:block')}
             >
                 <Input
                     type="text"

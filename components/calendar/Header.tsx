@@ -43,16 +43,20 @@ const Header: React.FC<HeaderProps> = ({}) => {
 
             <motion.div className="flex-1 flex justify-end items-center gap-5">
                 <CommandMenu />
-                <PrevButton />
+                <div className="hidden md:block">
+                    <PrevButton />
+                </div>
                 <div
                     key={format(selectedDate, 'MMMM yyyy')}
                     className="flex items-center space-x-2"
                 >
-                    <span className="text-center text-lg tracking-wider font-bold uppercase">
+                    <span className="text-center text-xs md:text-base lg:text-lg tracking-wider font-bold uppercase">
                         {getHeader()}
                     </span>
                 </div>
-                <NextButton />
+                <div className="hidden md:block">
+                    <NextButton />
+                </div>
             </motion.div>
         </div>
     )
