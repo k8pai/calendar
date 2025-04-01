@@ -2,14 +2,24 @@
 
 import Calendar from '@/components/calendar/Calendar'
 import Header from '@/components/calendar/Header'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { viewModes } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 const CalendarPage = () => {
+    const { viewMode } = useAppSelector((state) => state.calendar)
+
     return (
-        <div className="min-h-screen p-6 h-full flex flex-col">
+        <div
+            className={cn(
+                'min-h-screen p-6 flex flex-col',
+                viewMode === viewModes.DAY ? ' h-screen' : ' h-full'
+            )}
+        >
             <div>
                 <Header />
             </div>
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
                 <Calendar />
             </div>
         </div>
