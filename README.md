@@ -36,6 +36,7 @@ npm start
 | `← (Left Arrow)` | Navigate to the previous day/week/month/year based on current view |
 | `→ (Right Arrow)` | Navigate to the next day/week/month/year based on current view |
 | `k`          | Open the date search input to jump to a specific date |
+| `ctrl + k` or `⌘ + k`          | Open the command input to view more specific features |
 
 ## Usage
 - Press `d`, `m`, `y`, or `w` to switch between views.
