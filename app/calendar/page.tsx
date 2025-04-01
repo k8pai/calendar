@@ -16,9 +16,7 @@ const CalendarPage = () => {
                 viewMode === viewModes.DAY ? ' h-screen' : ' h-full'
             )}
         >
-            <div>
-                <Header />
-            </div>
+            <Header />
             <div className="flex-1 flex flex-col h-full overflow-hidden">
                 <Calendar />
             </div>

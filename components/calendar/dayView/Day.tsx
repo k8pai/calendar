@@ -75,7 +75,7 @@ const Day: React.FC<CalendarProps> = ({ view }) => {
                                                     'opacity-0'
                                             )}
                                         >
-                                            {format(hour, 'HH aa')}
+                                            {format(hour, 'hh aa')}
                                         </div>
                                     </div>
                                     <div
