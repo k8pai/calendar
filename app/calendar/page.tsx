@@ -1,7 +1,7 @@
 'use client'
 
+import Header from '@/app/calendar/Header'
 import Calendar from '@/components/calendar/Calendar'
-import Header from '@/components/calendar/Header'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { viewModes } from '@/lib/constants'
 import { cn } from '@/lib/utils'

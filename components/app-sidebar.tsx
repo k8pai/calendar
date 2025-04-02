@@ -3,6 +3,7 @@
 import {
     IconCalendar,
     IconCamera,
+    IconClock,
     IconDatabase,
     IconFileAi,
     IconFileDescription,
@@ -42,6 +43,11 @@ export const data = {
             title: 'Calendar',
             url: '/calendar',
             icon: IconCalendar,
+        },
+        {
+            title: 'Clock',
+            url: '/clock',
+            icon: IconClock,
         },
         // {
         //     title: 'Lifecycle',
