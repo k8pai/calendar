@@ -1,5 +1,5 @@
+import Header from '@/app/calendar/Header'
 import Calendar from '@/components/calendar/Calendar'
-import Header from '@/components/calendar/Header'
 
 export default function Home() {
     return (
