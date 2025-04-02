@@ -38,7 +38,6 @@ const Header: React.FC<HeaderProps> = ({}) => {
                     className="mx-2 data-[orientation=vertical]:h-4"
                 />
                 <Menu />
-                {/* <SwitchCalendar /> */}
             </motion.div>
 
             <motion.div className="flex-1 flex justify-end items-center gap-5">
