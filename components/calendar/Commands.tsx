@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { calendarViewModes } from '@/lib/constants'
 import { isSubString } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
 import { ViewModeType } from '@/types/calendarTypes'
