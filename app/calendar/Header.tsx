@@ -6,7 +6,6 @@ import Menu from '@/components/calendar/Menu'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
-import { viewModes } from '@/lib/constants'
 import { format } from 'date-fns'
 import { motion } from 'motion/react'
 import React from 'react'
@@ -20,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
     )
 
     const getHeader = () => {
-        if (calendarViewMode === viewModes.YEAR) {
+        if (calendarViewMode === calendarViewModes.YEAR) {
             return format(selectedDate, 'yyyy')
         }
         return format(selectedDate, 'MMMM yyyy')

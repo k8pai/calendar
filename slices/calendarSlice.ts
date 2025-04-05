@@ -1,4 +1,4 @@
-import { viewModes } from '@/lib/constants'
+import { calendarViewModes } from '@/lib/constants'
 import { CalendarModeType, ViewModeType } from '@/types/calendarTypes'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface CalendarEvent {
@@ -20,7 +20,7 @@ interface CalendarState {
 const initialState: CalendarState = {
     selectedDate: new Date().toISOString(), // Stores the currently selected date
     events: [], // Array to store calendar events
-    viewMode: viewModes.MONTH, // Options: 'day', 'week', 'month', 'year'
+    viewMode: calendarViewModes.MONTH, // Options: 'day', 'week', 'month', 'year'
     filters: {}, // Stores any applied filters (e.g., event types)
     calendarType: 'gregorian', // Options: 'gregorian', 'julian'
     commandMode: false,

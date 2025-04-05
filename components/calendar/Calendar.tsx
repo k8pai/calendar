@@ -6,7 +6,7 @@ import Weekends from '@/components/calendar/weekends/Weekends'
 import Week from '@/components/calendar/weekView/Week'
 import Year from '@/components/calendar/yearView/Year'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
-import { viewModes } from '@/lib/constants'
+import { calendarViewModes } from '@/lib/constants'
 import React from 'react'
 
 interface CalendarProps {
@@ -19,23 +19,23 @@ const Calendar: React.FC<CalendarProps> = ({ view }) => {
         (state) => state.calendar
     )
 
-    if (calendarViewMode === viewModes.DAY) {
+    if (calendarViewMode === calendarViewModes.DAY) {
         return <Day />
     }
 
-    if (calendarViewMode === viewModes.WEEK) {
+    if (calendarViewMode === calendarViewModes.WEEK) {
         return <Week />
     }
 
-    if (calendarViewMode === viewModes.MONTH) {
+    if (calendarViewMode === calendarViewModes.MONTH) {
         return <Month />
     }
 
-    if (calendarViewMode === viewModes.YEAR) {
+    if (calendarViewMode === calendarViewModes.YEAR) {
         return <Year />
     }
 
-    if (calendarViewMode === viewModes.WEEKENDS) {
+    if (calendarViewMode === calendarViewModes.WEEKENDS) {
         return <Weekends />
     }
 }

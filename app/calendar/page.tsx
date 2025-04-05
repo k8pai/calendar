@@ -3,7 +3,6 @@
 import Header from '@/app/calendar/Header'
 import Calendar from '@/components/calendar/Calendar'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
-import { viewModes } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const CalendarPage = () => {
@@ -13,7 +12,7 @@ const CalendarPage = () => {
         <div
             className={cn(
                 'min-h-screen p-6 flex flex-col',
-                viewMode === viewModes.DAY ? ' h-screen' : ' h-full'
+                viewMode === calendarViewModes.DAY ? ' h-screen' : ' h-full'
             )}
         >
             <Header />

@@ -12,7 +12,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
-import { viewModes } from '@/lib/constants'
 import { isSubString } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
 import { ViewModeType } from '@/types/calendarTypes'
@@ -66,8 +65,8 @@ export function CommandMenu() {
         () => [
             {
                 label: 'Day View',
-                value: viewModes.DAY,
-                isValid: (mode: ViewModeType) => mode !== viewModes.DAY,
+                value: calendarViewModes.DAY,
+                isValid: (mode: ViewModeType) => mode !== calendarViewModes.DAY,
                 handler: () => {
                     setDayView()
                     toggleCommand()
@@ -75,8 +74,9 @@ export function CommandMenu() {
             },
             {
                 label: 'Week View',
-                value: viewModes.WEEK,
-                isValid: (mode: ViewModeType) => mode !== viewModes.WEEK,
+                value: calendarViewModes.WEEK,
+                isValid: (mode: ViewModeType) =>
+                    mode !== calendarViewModes.WEEK,
                 handler: () => {
                     setWeekView()
                     toggleCommand()
@@ -84,8 +84,9 @@ export function CommandMenu() {
             },
             {
                 label: 'Month View',
-                value: viewModes.MONTH,
-                isValid: (mode: ViewModeType) => mode !== viewModes.MONTH,
+                value: calendarViewModes.MONTH,
+                isValid: (mode: ViewModeType) =>
+                    mode !== calendarViewModes.MONTH,
                 handler: () => {
                     setMonthView()
                     toggleCommand()
@@ -93,8 +94,9 @@ export function CommandMenu() {
             },
             {
                 label: 'Year View',
-                value: viewModes.YEAR,
-                isValid: (mode: ViewModeType) => mode !== viewModes.YEAR,
+                value: calendarViewModes.YEAR,
+                isValid: (mode: ViewModeType) =>
+                    mode !== calendarViewModes.YEAR,
                 handler: () => {
                     setYearView()
                     toggleCommand()

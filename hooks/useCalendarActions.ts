@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
-import { viewModes } from '@/lib/constants'
+import { calendarViewModes } from '@/lib/constants'
 import {
     setCalendarType,
     setCommandMode,
@@ -115,23 +115,23 @@ export const useCalendarAction = () => {
 
     // views goes here...
     const setDayView = () => {
-        dispatch(setViewMode(viewModes.DAY))
+        dispatch(setViewMode(calendarViewModes.DAY))
     }
 
     const setWeekView = () => {
-        dispatch(setViewMode(viewModes.WEEK))
+        dispatch(setViewMode(calendarViewModes.WEEK))
     }
 
     const setMonthView = () => {
-        dispatch(setViewMode(viewModes.MONTH))
+        dispatch(setViewMode(calendarViewModes.MONTH))
     }
 
     const setYearView = () => {
-        dispatch(setViewMode(viewModes.YEAR))
+        dispatch(setViewMode(calendarViewModes.YEAR))
     }
 
     const setWeekendsView = () => {
-        dispatch(setViewMode(viewModes.WEEKENDS))
+        dispatch(setViewMode(calendarViewModes.WEEKENDS))
     }
 
     const setCommandFlag = (flag: boolean) => {
@@ -145,19 +145,19 @@ export const useCalendarAction = () => {
 
     const previous = (cb?: Function) => {
         switch (calendarViewMode) {
-            case viewModes.DAY:
+            case calendarViewModes.DAY:
                 goToPreviousDay(cb)
                 break
-            case viewModes.WEEK:
+            case calendarViewModes.WEEK:
                 goToPreviousWeek(cb)
                 break
-            case viewModes.MONTH:
+            case calendarViewModes.MONTH:
                 goToPreviousMonth(cb)
                 break
-            case viewModes.YEAR:
+            case calendarViewModes.YEAR:
                 goToPreviousYear(cb)
                 break
-            case viewModes.WEEKENDS:
+            case calendarViewModes.WEEKENDS:
                 goToPreviousYear(cb)
                 break
             default:
@@ -167,19 +167,19 @@ export const useCalendarAction = () => {
 
     const next = (cb?: Function) => {
         switch (calendarViewMode) {
-            case viewModes.DAY:
+            case calendarViewModes.DAY:
                 goToNextDay(cb)
                 break
-            case viewModes.WEEK:
+            case calendarViewModes.WEEK:
                 goToNextWeek(cb)
                 break
-            case viewModes.MONTH:
+            case calendarViewModes.MONTH:
                 goToNextMonth(cb)
                 break
-            case viewModes.YEAR:
+            case calendarViewModes.YEAR:
                 goToNextYear(cb)
                 break
-            case viewModes.WEEKENDS:
+            case calendarViewModes.WEEKENDS:
                 goToNextYear(cb)
                 break
             default:
@@ -189,13 +189,13 @@ export const useCalendarAction = () => {
 
     const isCurrSelected = (cb?: Function) => {
         switch (calendarViewMode) {
-            case viewModes.DAY:
+            case calendarViewModes.DAY:
                 return isSameDay(selectedDate, new Date())
-            case viewModes.WEEK:
+            case calendarViewModes.WEEK:
                 return isSameWeek(selectedDate, new Date())
-            case viewModes.MONTH:
+            case calendarViewModes.MONTH:
                 return isSameMonth(selectedDate, new Date())
-            case viewModes.YEAR:
+            case calendarViewModes.YEAR:
                 return isSameYear(selectedDate, new Date())
             default:
                 break

@@ -1,12 +1,19 @@
 import { format, set } from 'date-fns'
 
-export const viewModes = {
+export const calendarViewModes = {
     DAY: 'day',
     WEEK: 'week',
     MONTH: 'month',
     YEAR: 'year',
     WEEKENDS: 'weekends',
 } as const
+
+export const clockViewModes = {
+    TIMER: 'timer',
+    ALARM: 'alarm',
+    STOPWATCH: 'stopwatch',
+    CLOCK: 'clock',
+}
 
 export const calendarTypes = [
     {
@@ -33,7 +40,7 @@ export const MONTHS = Array.from({ length: 12 }, (_, i) =>
 )
 
 export default {
-    viewModes,
+    calendarViewModes,
     calendarTypes,
     MONTHS,
 }
