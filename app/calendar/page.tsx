@@ -3,6 +3,7 @@
 import Header from '@/app/calendar/Header'
 import Calendar from '@/components/calendar/Calendar'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { calendarViewModes } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const CalendarPage = () => {
