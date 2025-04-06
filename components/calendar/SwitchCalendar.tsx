@@ -12,15 +12,16 @@ import {
 import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { calendarTypes } from '@/lib/constants'
+import { CalendarModeType } from '@/types/calendarTypes'
 
 export const SwitchCalendar = () => {
     const { calendarType } = useAppSelector((state) => state.calendar)
     const { setCalendarType } = useCalendarAction()
 
-    const handleSelectChange = (value: string) => {
+    const handleSelectChange = (value: CalendarModeType) => {
         // Implement your custom logic to set the calendar type
         // For example, call setCalendarType('gregorian') or setCalendarType('julian')
-        if (value === 'gregorian' || value === 'julian') {
+        if (value === 'gregorian' || value === 'Coptic') {
             setCalendarType(value)
         }
     }
