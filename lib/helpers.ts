@@ -150,3 +150,19 @@ export const getCopticDays = (date: Date) => {
         gregorianDays: gregorianCopticMap,
     }
 }
+
+export const getCopticYear = (date: Date) => {
+    if (date.getMonth() >= 9 && date.getDate() >= 11) {
+        return date.getFullYear() - 285
+    } else {
+        return date.getFullYear() - 284
+    }
+}
+
+export const getCopticDate = (date: Date) => {
+    let { gregorianDays } = getCopticDays(date)
+    if (gregorianDays[format(date, 'ddMMMMuuuu')]) {
+        return gregorianDays[format(date, 'ddMMMMuuuu')]
+    }
+    return null
+}
