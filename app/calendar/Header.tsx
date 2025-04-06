@@ -3,10 +3,12 @@
 import { NextButton, PrevButton } from '@/components/calendar/Actions'
 import { CommandMenu } from '@/components/calendar/Commands'
 import Menu from '@/components/calendar/Menu'
+import { SwitchCalendar } from '@/components/calendar/SwitchCalendar'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { calendarViewModes } from '@/lib/constants'
+import { getCopticDate } from '@/lib/helpers'
 import { format } from 'date-fns'
 import { motion } from 'motion/react'
 import React from 'react'
@@ -14,16 +16,38 @@ import React from 'react'
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
-    const { selectedDate } = useAppSelector((state) => state.calendar)
-    const { viewMode: calendarViewMode } = useAppSelector(
-        (state) => state.calendar
-    )
+    const {
+        selectedDate,
+        viewMode: calendarViewMode,
+        calendarType,
+    } = useAppSelector((state) => state.calendar)
+    const {} = useAppSelector((state) => state.calendar)
 
     const getHeader = () => {
-        if (calendarViewMode === calendarViewModes.YEAR) {
-            return format(selectedDate, 'yyyy')
+        console.log('calendarType', calendarType)
+
+        switch (calendarType) {
+            case 'gregorian':
+                if (calendarViewMode === calendarViewModes.YEAR) {
+                    return format(selectedDate, 'yyyy')
+                }
+                return format(selectedDate, 'MMMM yyyy')
+            case 'hebrew':
+                return format(selectedDate, 'MMMM yyyy')
+            case 'julian':
+                return format(selectedDate, 'MMMM yyyy')
+            case 'Coptic':
+                let copticData = getCopticDate(new Date(selectedDate))
+                if (copticData) {
+                    return `${copticData.month ?? ''} ${copticData.year ?? ''}`
+                }
+                return
+            default:
+                if (calendarViewMode === calendarViewModes.YEAR) {
+                    return format(selectedDate, 'yyyy')
+                }
+                return format(selectedDate, 'MMMM yyyy')
         }
-        return format(selectedDate, 'MMMM yyyy')
     }
 
     return (
@@ -38,6 +62,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
                     className="mx-2 data-[orientation=vertical]:h-4"
                 />
                 <Menu />
+                <SwitchCalendar />
             </motion.div>
 
             <motion.div className="flex-1 flex justify-end items-center gap-5">
