@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import calendarReducer from '../slices/calendarSlice'
+import clockReducer from '../slices/clockSlice'
 import keystrokeReducer from '../slices/keyboardSlice'
 
 export const store = configureStore({
     reducer: {
         calendar: calendarReducer,
         keystroke: keystrokeReducer,
+        clock: clockReducer,
     },
 })
 
