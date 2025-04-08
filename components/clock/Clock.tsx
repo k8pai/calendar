@@ -1,12 +1,21 @@
 import AnimateNumber from '@/components/clock/AnimateNumber'
+import { useClockAction } from '@/hooks/useClockActions'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { getTimeInTimeZone } from '@/lib/helpers'
 import { useEffect, useState } from 'react'
 
 const Clock = () => {
-    const [time, setTime] = useState(new Date())
+    const { timezone } = useAppSelector((state) => state.clock)
+    const { time: timeInISO, setLocalTime } = useClockAction()
+    const [time, setTime] = useState(
+        timeInISO ? new Date(timeInISO) : new Date()
+    )
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTime(new Date())
+            let time = getTimeInTimeZone(timezone)
+            console.log('time => ', timeInISO)
+            setTime(time ?? new Date())
         }, 1000)
         return () => clearInterval(interval)
     }, [time])

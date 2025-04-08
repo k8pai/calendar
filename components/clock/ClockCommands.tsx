@@ -1,0 +1,121 @@
+'use client'
+
+import {
+    Command,
+    CommandDialog,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from '@/components/ui/command'
+import { Input } from '@/components/ui/input'
+import { useCalendarAction } from '@/hooks/useCalendarActions'
+import { useClockAction } from '@/hooks/useClockActions'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { cn } from '@/lib/utils'
+import { Timezone, TimezoneName } from 'countries-and-timezones'
+import { motion } from 'motion/react'
+import { useEffect, useState } from 'react'
+
+const dateFormats = [
+    'dd',
+    'LL',
+    'LLL',
+    'LLLL',
+    'uuuu',
+    'yyyy',
+    'dd M',
+    'dd MM',
+    'dd MMM',
+    'dd MMMM',
+    'd M uuuu',
+    'd MM uuuu  ',
+    'd MMM uuuu',
+    'd MMMM uuuu',
+    'dd M uuuu',
+    'dd MM uuuu',
+    'dd MMM uuuu',
+    'dd MMMM uuuu',
+] as const
+
+export function ClockCommands({ countries }: { countries: Timezone[] }) {
+    const [command, setCommand] = useState('')
+    const { commandMode } = useAppSelector((state) => state.calendar)
+
+    const { toggleCommandFlag } = useCalendarAction()
+    const { setLocalTimezone } = useClockAction()
+
+    useEffect(() => {
+        const down = (event: KeyboardEvent) => {
+            if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
+                toggleCommand()
+                event.preventDefault()
+            }
+        }
+        window.addEventListener('keydown', down)
+        return () => window.removeEventListener('keydown', down)
+    }, [])
+
+    const toggleCommand = () => {
+        toggleCommandFlag()
+        setCommand('')
+    }
+
+    const onSelect = (value: TimezoneName) => {
+        setLocalTimezone(value)
+        console.log('value = > ', value)
+        toggleCommand()
+        setCommand(value)
+    }
+    console.log('commandMode => ', command)
+
+    return (
+        <div>
+            <motion.div
+                initial={{
+                    opacity: 0,
+                }}
+                animate={{
+                    opacity: commandMode ? 0 : 1,
+                }}
+                transition={{ duration: 0.2 }}
+                className={cn('hidden md:block')}
+            >
+                <Input
+                    type="text"
+                    placeholder="⌘ + K"
+                    onFocus={() => toggleCommand()}
+                    className="text-end w-[100px]"
+                />
+            </motion.div>
+
+            <CommandDialog open={commandMode} onOpenChange={toggleCommand}>
+                <Command>
+                    <CommandInput
+                        placeholder="Type a command or search..."
+                        value={command}
+                        onValueChange={setCommand}
+                    />
+                    <CommandList>
+                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandGroup heading="Suggestions">
+                            {countries.map((country, index) => {
+                                return (
+                                    <CommandItem
+                                        key={country.name}
+                                        onSelect={(value) =>
+                                            onSelect(value as TimezoneName)
+                                        }
+                                    >
+                                        {country.name}
+                                    </CommandItem>
+                                )
+                            })}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </CommandDialog>
+        </div>
+    )
+}
