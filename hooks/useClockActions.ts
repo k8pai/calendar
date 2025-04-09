@@ -1,38 +1,39 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/useTypedSelectors'
-import { getTimeInTimeZone } from '@/lib/helpers'
+import { useAppDispatch } from '@/hooks/useTypedSelectors'
 import { setTime, setTimezone } from '@/slices/clockSlice'
+import { tz } from '@date-fns/tz'
 import { TimezoneName } from 'countries-and-timezones'
-import { useState } from 'react'
+import { parseISO } from 'date-fns'
+import { useCallback, useState } from 'react'
 
 export const useClockAction = () => {
     const dispatch = useAppDispatch()
     const [prev, setPrev] = useState<'P' | 'N' | null>(null)
 
-    const { time } = useAppSelector((state) => state.clock)
-
-    const setLocalTimezone = (timezone: TimezoneName) => {
-        try {
-            let time_of_timezone = getTimeInTimeZone(timezone)
-            dispatch(setTimezone(timezone))
-
-            setLocalTime(
-                time_of_timezone
-                    ? time_of_timezone?.toISOString()
-                    : new Date().toISOString()
-            )
-        } catch (error) {
-            console.error('Error setting timezone:', error)
-        }
-    }
-
     const setLocalTime = (date: string) => {
         dispatch(setTime(date))
     }
 
+    const setLocalTimeZone = (tzone: TimezoneName) => {
+        dispatch(setTimezone(tzone))
+    }
+
+    const updateTimezoneWithTime = useCallback((tzone: TimezoneName) => {
+        try {
+            let parsedTime = parseISO(new Date().toISOString(), {
+                in: tz(tzone),
+            })
+
+            setLocalTimeZone(tzone)
+            setLocalTime(parsedTime.toString())
+        } catch (error) {
+            console.error('Error setting tzone:', error)
+        }
+    }, [])
+
     return {
         lastAction: prev,
-        time,
         setLocalTime,
-        setLocalTimezone,
+        setLocalTimeZone,
+        updateTimezoneWithTime,
     }
 }
