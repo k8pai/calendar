@@ -1,33 +1,57 @@
 import AnimateNumber from '@/components/clock/AnimateNumber'
-import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
-import { getTimeInTimeZone } from '@/lib/helpers'
+import { TZDate } from '@date-fns/tz'
 import { useEffect, useState } from 'react'
 
 const Clock = () => {
     const { timezone } = useAppSelector((state) => state.clock)
-    const { time: timeInISO, setLocalTime } = useClockAction()
-    const [time, setTime] = useState(
-        timeInISO ? new Date(timeInISO) : new Date()
-    )
+    const [localTime, setLocalTime] = useState(new TZDate(new Date(), timezone))
 
     useEffect(() => {
         const interval = setInterval(() => {
-            let time = getTimeInTimeZone(timezone)
-            console.log('time => ', timeInISO)
-            setTime(time ?? new Date())
+            const currentTime = new TZDate(new Date(), timezone)
+            setLocalTime(currentTime)
         }, 1000)
         return () => clearInterval(interval)
-    }, [time])
+    }, [localTime])
+
+    useEffect(() => {
+        const currentTime = new TZDate(new Date(), timezone)
+        setLocalTime(currentTime)
+    }, [timezone])
 
     return (
         <div className="flex-1 flex items-center justify-center text-5xl font-mono">
-            <div className="relative flex">
-                <AnimateNumber initialNumber={time.getHours()} padStart={2} />
+            <div className="relative flex justify-center items-start gap-2">
+                <div className="flex flex-col items-center justify-center gap-5">
+                    <AnimateNumber
+                        initialNumber={localTime.getHours()}
+                        padStart={2}
+                    />
+                    <span className="text-sm font-mono text-gray-500">
+                        hours
+                    </span>
+                </div>
                 <span>:</span>
-                <AnimateNumber initialNumber={time.getMinutes()} padStart={2} />
+                <div className="flex flex-col items-center justify-center gap-5">
+                    <AnimateNumber
+                        initialNumber={localTime.getMinutes()}
+                        padStart={2}
+                    />
+                    <span className="text-sm font-mono text-gray-500">
+                        minutes
+                    </span>
+                </div>
                 <span>:</span>
-                <AnimateNumber initialNumber={time.getSeconds()} padStart={2} />
+                <div className="flex flex-col items-center justify-center gap-5">
+                    <AnimateNumber
+                        initialNumber={localTime.getSeconds()}
+                        padStart={2}
+                    />
+                    <span className="text-sm font-mono text-gray-500">
+                        seconds
+                    </span>
+                </div>
             </div>
         </div>
     )
