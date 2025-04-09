@@ -18,33 +18,23 @@ import { Timezone, TimezoneName } from 'countries-and-timezones'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
-const dateFormats = [
-    'dd',
-    'LL',
-    'LLL',
-    'LLLL',
-    'uuuu',
-    'yyyy',
-    'dd M',
-    'dd MM',
-    'dd MMM',
-    'dd MMMM',
-    'd M uuuu',
-    'd MM uuuu  ',
-    'd MMM uuuu',
-    'd MMMM uuuu',
-    'dd M uuuu',
-    'dd MM uuuu',
-    'dd MMM uuuu',
-    'dd MMMM uuuu',
-] as const
-
 export function ClockCommands({ countries }: { countries: Timezone[] }) {
     const [command, setCommand] = useState('')
     const { commandMode } = useAppSelector((state) => state.calendar)
 
     const { toggleCommandFlag } = useCalendarAction()
-    const { setLocalTimezone } = useClockAction()
+    const { setLocalTimeZone } = useClockAction()
+
+    const toggleCommand = () => {
+        toggleCommandFlag()
+        setCommand('')
+    }
+
+    const onSelect = (value: TimezoneName) => {
+        setLocalTimeZone(value)
+        toggleCommand()
+        setCommand(value)
+    }
 
     useEffect(() => {
         const down = (event: KeyboardEvent) => {
@@ -56,19 +46,6 @@ export function ClockCommands({ countries }: { countries: Timezone[] }) {
         window.addEventListener('keydown', down)
         return () => window.removeEventListener('keydown', down)
     }, [])
-
-    const toggleCommand = () => {
-        toggleCommandFlag()
-        setCommand('')
-    }
-
-    const onSelect = (value: TimezoneName) => {
-        setLocalTimezone(value)
-        console.log('value = > ', value)
-        toggleCommand()
-        setCommand(value)
-    }
-    console.log('commandMode => ', command)
 
     return (
         <div>
