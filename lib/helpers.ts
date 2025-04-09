@@ -6,11 +6,11 @@ import {
     endOfMonth,
     format,
     getDay,
+    isBefore,
     isLeapYear,
     set,
     startOfMonth,
     subDays,
-    subYears,
 } from 'date-fns'
 
 export const getSelectedMonthDays = (selectedDate: string) => {
@@ -69,12 +69,18 @@ export const isSubString = (str1: string, str2: string) => {
 }
 
 export const getCopticDays = (date: Date) => {
-    const currentCopticMappedGregorianYear =
-        date.getMonth() >= 9 && date.getDate() >= 11 ? addYears(date, 1) : date
+    const year = date.getFullYear()
+    const nextGregorianLeap = isLeapYear(addYears(date, 1))
+    const potentialStart = new Date(year, 8, nextGregorianLeap ? 12 : 11) // Sept 11 or 12
 
-    let is_leap_year = isLeapYear(currentCopticMappedGregorianYear)
+    let copticYearStart = isBefore(date, potentialStart)
+        ? new Date(year - 1, 8, isLeapYear(date) ? 12 : 11)
+        : potentialStart
+
     let copticYearDetails = {
-        year: currentCopticMappedGregorianYear.getFullYear() - 284,
+        year:
+            copticYearStart.getFullYear() -
+            (copticYearStart.getFullYear() === date.getFullYear() ? 285 : 284),
     }
 
     let gregorianCopticMap: Record<
@@ -87,20 +93,12 @@ export const getCopticDays = (date: Date) => {
         year: any
     }> = []
 
-    let copticStartDate = set(date, {
-        year:
-            date.getMonth() >= 9 && date.getDate() >= 11
-                ? date.getFullYear()
-                : subYears(date, 1).getFullYear(),
-        month: 8,
-        date: is_leap_year ? 12 : 11,
-    })
-
     let currIterMonth = 0,
         iterDay = 1
+
     const copticYearDays = eachDayOfInterval({
-        start: copticStartDate,
-        end: addYears(subDays(copticStartDate, 1), 1),
+        start: copticYearStart,
+        end: addYears(subDays(copticYearStart, 1), 1),
     }).map((el, index) => {
         let currMonth = COPTIC_MONTHS[currIterMonth]
         let details = {
@@ -118,34 +116,53 @@ export const getCopticDays = (date: Date) => {
         } else {
             iterDay += 1
         }
+
+        if (
+            details.day === 1 ||
+            details.day === 30 ||
+            details.month === 'Nasi'
+        ) {
+            console.log(
+                `coptic year day: ${details.day} date: ${details.date} month: ${details.month} year: ${details.year}`
+                // gregorianCopticArray[gregorianCopticArray.length - 1]
+            )
+        }
         return format(el, 'dd/MM/yyyy')
     })
 
-    // console.log(copticYearDays)
-    console.log(date)
-    console.log(currentCopticMappedGregorianYear)
-    console.log(gregorianCopticArray[0])
-    console.log(gregorianCopticArray[gregorianCopticArray.length - 1])
+    console.log('copticYearDays', copticYearDays.length)
+    // asdfjalskjdf sd
+
+    // const sameGregorianAndCopticYear =
+    //     date.getMonth() >= 8 && date.getDate() >= 11
+
+    // console.log('year => ', year + 1, nextGregorianLeap)
+
+    // const currentCopticMappedGregorianYear = sameGregorianAndCopticYear
+    //     ? addYears(date, 1)
+    //     : date
+
+    // let is_leap_year = isLeapYear(currentCopticMappedGregorianYear)
+
+    // const followingYear = copticYearStart.getFullYear() + 1
+    // const isCopticLeap = isLeapYear(followingYear)
+
+    // const copticYearEnd = addDays(
+    //     copticYearStart,
+    //     365 + (isLeapYear(year) ? 1 : 0)
+    // )
+    // let copticEndDate = set(date, {
+    //     year: addYears(copticYearStart, 1).getFullYear(),
+    //     month: 8,
+    //     date: is_leap_year ? 10 : 10,
+    // })
+
+    // console.log('copticYearStart only', gregorianCopticArray[0])
+    // console.log(
+    //     'copticYearStart end only',
+    //     gregorianCopticArray[gregorianCopticArray.length - 1]
+    // )
     // console.log(Object.values(gregorianCopticMap))
-
-    if (is_leap_year) {
-        // if the current month is greater than september 11 then that means the current year a new year, and the offset will be 285, else
-        // 284 years is what is the offset between
-        if (date.getMonth() >= 9) {
-            if (date.getDate() > 11) {
-                copticYearDetails.year = date.getFullYear() - 285
-            } else {
-                copticYearDetails.year = date.getFullYear() - 284
-            }
-        } else {
-            copticYearDetails.year = date.getFullYear() - 284
-        }
-
-        // start with september 12th from previous year.
-
-        let daysOfCurrentCopticYear = subYears(date, 1)
-    }
-
     return {
         gregorianDays: gregorianCopticMap,
     }
@@ -165,4 +182,28 @@ export const getCopticDate = (date: Date) => {
         return gregorianDays[format(date, 'ddMMMMuuuu')]
     }
     return null
+}
+
+export const getCopticContents = (date: Date) => {
+    // lets assume to start with 11th sepetember which is the usual case.
+
+    const monthMap = COPTIC_MONTHS.reduce((acc, el, index) => {
+        let indexKey = index + 1
+        if (indexKey <= 12) {
+            acc[`${index + 1}`] = {
+                month: el,
+                days: 30,
+                leapyearDays: 30,
+            }
+        } else {
+            acc[`${index + 1}`] = {
+                month: el,
+                days: 5,
+                leapyearDays: 6,
+            }
+        }
+        return acc
+    }, {} as Record<string, any>)
+
+    console.log(monthMap)
 }

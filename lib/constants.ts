@@ -28,6 +28,10 @@ export const calendarTypes = [
         label: 'Julian',
         value: 'julian',
     },
+    {
+        label: 'Coptic',
+        value: 'Coptic',
+    },
 ] as const
 
 export const MONTHS = Array.from({ length: 12 }, (_, i) =>
@@ -39,8 +43,25 @@ export const MONTHS = Array.from({ length: 12 }, (_, i) =>
     )
 )
 
+export const COPTIC_MONTHS = [
+    'Thout',
+    'Paopi',
+    'Hathor',
+    'Koiak',
+    'Tobi',
+    'Meshir',
+    'Paremhat',
+    'Paremoude',
+    'Pashons',
+    'Paoni',
+    'Epip',
+    'Mesori',
+    'Nasi', // aka "Pi Kogi Enavot" (epagomenal days)
+]
+
 export default {
     calendarViewModes,
     calendarTypes,
     MONTHS,
+    COPTIC_MONTHS,
 }
