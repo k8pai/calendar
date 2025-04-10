@@ -3,7 +3,9 @@
 import { ClockCommands } from '@/components/clock/ClockCommands'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { getAllCountriesWithTimezones } from '@/lib/timezoneUtils'
+import { TZDate } from '@date-fns/tz'
 import { format } from 'date-fns'
 import { motion } from 'motion/react'
 import React, { useMemo } from 'react'
@@ -11,6 +13,7 @@ import React, { useMemo } from 'react'
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
+    const { time, timezone } = useAppSelector((state) => state.clock)
     const countries = useMemo(() => {
         let response = getAllCountriesWithTimezones()
         return response
@@ -30,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
             <motion.div className="flex-1 flex justify-end items-center gap-5">
                 <div className="flex items-center space-x-2">
                     <span className="text-center text-xs md:text-base lg:text-lg tracking-wider font-bold uppercase">
-                        {format(new Date(), 'dd MMMM yyyy')}
+                        {format(new TZDate(time, timezone), 'dd MMMM yyyy')}
                     </span>
                 </div>
             </motion.div>
