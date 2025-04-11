@@ -21,7 +21,7 @@ export const SwitchCalendar = () => {
     const handleSelectChange = (value: CalendarModeType) => {
         // Implement your custom logic to set the calendar type
         // For example, call setCalendarType('gregorian') or setCalendarType('julian')
-        if (value === 'gregorian' || value === 'Coptic') {
+        if (value === 'gregorian' || value === 'julian' || value === 'Coptic') {
             setCalendarType(value)
         }
     }
