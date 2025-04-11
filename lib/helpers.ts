@@ -4,12 +4,14 @@ import {
     addYears,
     eachDayOfInterval,
     endOfMonth,
+    endOfYear,
     format,
     getDay,
     isBefore,
     isLeapYear,
     set,
     startOfMonth,
+    startOfYear,
     subDays,
 } from 'date-fns'
 
@@ -206,4 +208,34 @@ export const getCopticContents = (date: Date) => {
     }, {} as Record<string, any>)
 
     console.log(monthMap)
+}
+
+export const getJulianDateMap = (date: Date) => {
+    const yearStartDate = startOfYear(date)
+    const yearEndDate = endOfYear(date)
+
+    const daysInYear = eachDayOfInterval({
+        start: yearStartDate,
+        end: yearEndDate,
+    })
+
+    const julianDateMap: Record<
+        string,
+        { day: number; month: string; year: number; date: Date }
+    > = {}
+    for (const iteratingDate of daysInYear) {
+        const dayKey = format(iteratingDate, 'ddMMMMuuuu')
+        const julianDate = subDays(iteratingDate, 13)
+        const date = julianDate.getDate()
+        const month = format(julianDate, 'MMMM')
+        const year = julianDate.getFullYear()
+        julianDateMap[dayKey] = {
+            day: date,
+            month: month,
+            year: year,
+            date: julianDate,
+        }
+    }
+
+    return julianDateMap
 }
