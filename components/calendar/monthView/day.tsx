@@ -1,5 +1,6 @@
 'use client'
 
+import { TooltipWrapper } from '@/components/common/TooltipWrapper'
 import {
     ContextMenu,
     ContextMenuContent,
@@ -8,6 +9,7 @@ import {
 } from '@/components/ui/context-menu'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { getJulianDateMap } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
 import { format, isEqual, isSameDay, startOfMonth } from 'date-fns'
 import { motion } from 'motion/react'
@@ -32,7 +34,9 @@ interface CalendarProps {
 const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
     const [dailyEvents, setDailyEvents] = useState<Array<calendarEventType>>([])
 
-    const { selectedDate } = useAppSelector((state) => state.calendar)
+    const { selectedDate, calendarType } = useAppSelector(
+        (state) => state.calendar
+    )
     const { setDate } = useCalendarAction()
     // let dailyEvents = events
     const getDisplayDay = (date: Date) => {
@@ -41,6 +45,45 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
         }
 
         return format(date, 'd')
+    }
+
+    const getCalendarTypeDay = (date: Date) => {
+        switch (calendarType) {
+            case 'gregorian':
+                if (isSameDay(date, startOfMonth(date))) {
+                    return format(date, 'MMM d')
+                }
+
+                return format(date, 'd')
+            case 'hebrew':
+                return format(selectedDate, 'MMMM yyyy')
+            case 'julian':
+                const julianMap = getJulianDateMap(new Date(selectedDate))
+
+                const julianDate = julianMap[format(date, 'ddMMMMuuuu')]
+
+                if (isSameDay(julianDate.date, startOfMonth(julianDate.date))) {
+                    return format(julianDate.date, 'MMM d')
+                }
+
+                return format(julianDate.date, 'd')
+            case 'Coptic':
+                return null
+            // getCopticContents(new Date(selectedDate))
+            // let copticData = getCopticDate(new Date(selectedDate))
+            // if (copticData) {
+            //     return `${copticData.month ?? ''} ${
+            //         copticData.year ?? ''
+            //     } ${format(selectedDate, 'MMMM yyyy')}`
+            // }
+            // return format(selectedDate, 'dd MMMM yyyy')
+            default:
+                if (isSameDay(date, startOfMonth(date))) {
+                    return format(date, 'MMM d')
+                }
+
+                return format(date, 'd')
+        }
     }
 
     const handleActions = (actionName: string) => {
@@ -67,7 +110,10 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
                     className={cn(
                         `border border-t-0  p-2 transition-all hover:shadow-md flex flex-col items-center flex-1`,
                         isSameDay(day, new Date()) && 'bg-secondary font-bold',
-                        index < 7 ? 'rounded-br-md rounded-bl-md' : 'rounded-md'
+                        index < 7
+                            ? 'rounded-br-md rounded-bl-md'
+                            : 'rounded-md',
+                        calendarType !== 'gregorian' && 'justify-between'
                     )}
                     key={`${format(day, 'MMuuuu')}-${
                         isSameDay(day, selectedDate) ? 'flag-' : ''
@@ -81,22 +127,41 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
                     }}
                     transition={{ duration: 0.1 }}
                 >
-                    {isEqual(
-                        format(day, 'dd-MMMM-uuuu'),
-                        format(selectedDate, 'dd-MMMM-uuuu')
+                    <div className="flex-1">
+                        <span
+                            className={cn(
+                                'w-fit p-2 text-center',
+                                isEqual(
+                                    format(day, 'dd-MMMM-uuuu'),
+                                    format(selectedDate, 'dd-MMMM-uuuu')
+                                ) &&
+                                    'rounded-full font-bold text-3xl text-blue-600'
+                            )}
+                        >
+                            {getDisplayDay(day)}
+                        </span>
+                    </div>
+                    {calendarType !== 'gregorian' && (
+                        <div className="flex justify-end w-full">
+                            <span
+                                className={cn(
+                                    'w-fit p-2 text-right text-sm cursor-pointer',
+                                    isEqual(
+                                        format(day, 'dd-MMMM-uuuu'),
+                                        format(selectedDate, 'dd-MMMM-uuuu')
+                                    ) &&
+                                        'rounded-full font-bold text-sm text-blue-600'
+                                )}
+                            >
+                                <TooltipWrapper
+                                    buttonType="ghost"
+                                    value={getCalendarTypeDay(day) ?? ''}
+                                    description={`${calendarType} Type`}
+                                />
+                            </span>
+                        </div>
                     )}
-                    <span
-                        className={cn(
-                            'w-fit p-2 text-center',
-                            isEqual(
-                                format(day, 'dd-MMMM-uuuu'),
-                                format(selectedDate, 'dd-MMMM-uuuu')
-                            ) && 'rounded-full font-bold text-3xl text-blue-600'
-                        )}
-                    >
-                        {getDisplayDay(day)}
-                    </span>
-                    {dailyEvents.map((event) => {
+                    {/* {dailyEvents.map((event) => {
                         return (
                             <div
                                 className="rounded bg-accent mb-1 p-0.5"
@@ -105,7 +170,7 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
                                 {event.title}
                             </div>
                         )
-                    })}
+                    })} */}
                 </motion.div>
             </ContextMenuTrigger>
             <ContextMenuContent>
