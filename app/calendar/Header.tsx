@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { calendarViewModes } from '@/lib/constants'
-import { getCopticDate } from '@/lib/helpers'
+import { getCopticDate, getJulianDateMap } from '@/lib/helpers'
 import { format } from 'date-fns'
 import { motion } from 'motion/react'
 import React from 'react'
@@ -21,7 +21,6 @@ const Header: React.FC<HeaderProps> = ({}) => {
         viewMode: calendarViewMode,
         calendarType,
     } = useAppSelector((state) => state.calendar)
-    const {} = useAppSelector((state) => state.calendar)
 
     const getHeader = () => {
         console.log('calendarType', calendarType)
@@ -35,13 +34,18 @@ const Header: React.FC<HeaderProps> = ({}) => {
             case 'hebrew':
                 return format(selectedDate, 'MMMM yyyy')
             case 'julian':
-                return format(selectedDate, 'MMMM yyyy')
+                const julianMap = getJulianDateMap(new Date(selectedDate))
+                const julianDate = julianMap[format(selectedDate, 'ddMMMMuuuu')]
+                return format(julianDate.date, 'MMMM yyyy')
             case 'Coptic':
+                // getCopticContents(new Date(selectedDate))
                 let copticData = getCopticDate(new Date(selectedDate))
                 if (copticData) {
-                    return `${copticData.month ?? ''} ${copticData.year ?? ''}`
+                    return `${copticData.month ?? ''} ${
+                        copticData.year ?? ''
+                    } ${format(selectedDate, 'MMMM yyyy')}`
                 }
-                return
+                return format(selectedDate, 'dd MMMM yyyy')
             default:
                 if (calendarViewMode === calendarViewModes.YEAR) {
                     return format(selectedDate, 'yyyy')
