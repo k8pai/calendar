@@ -1,5 +1,6 @@
 'use client'
 
+import Footer from '@/app/clock/Footer'
 import Header from '@/app/clock/Header'
 import Clock from '@/components/clock/Clock'
 
@@ -10,6 +11,7 @@ const page = () => {
             <div className="flex-1 flex flex-col">
                 <Clock />
             </div>
+            <Footer />
         </div>
     )
 }

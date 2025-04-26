@@ -63,7 +63,7 @@ export function ClockCommands({ countries }: { countries: Timezone[] }) {
                     type="text"
                     placeholder="⌘ + K"
                     onFocus={() => toggleCommand()}
-                    className="text-end w-[100px]"
+                    className="text-end"
                 />
             </motion.div>
 
