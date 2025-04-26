@@ -21,7 +21,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
                     stiffness: 50,
                     delay: 0.5,
                 }}
-                className="text-center text-sm"
+                className="text-sm font-mono text-gray-700"
             >
                 {timezone}
             </motion.span>
