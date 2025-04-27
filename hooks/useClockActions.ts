@@ -1,5 +1,12 @@
 import { useAppDispatch } from '@/hooks/useTypedSelectors'
-import { setTime, setTimezone } from '@/slices/clockSlice'
+import {
+    addToTimezoneList,
+    removeFromTimezoneList,
+    setTime,
+    setTimezone,
+    toggleCommandMode,
+    toggleTimezoneView,
+} from '@/slices/clockSlice'
 import { tz } from '@date-fns/tz'
 import { TimezoneName } from 'countries-and-timezones'
 import { parseISO } from 'date-fns'
@@ -15,6 +22,22 @@ export const useClockAction = () => {
 
     const setLocalTimeZone = (tzone: TimezoneName) => {
         dispatch(setTimezone(tzone))
+    }
+
+    const setToggleTimezoneView = () => {
+        dispatch(toggleTimezoneView())
+    }
+
+    const toggleCommandFlag = () => {
+        dispatch(toggleCommandMode())
+    }
+
+    const addTimezoneList = (tz: TimezoneName) => {
+        dispatch(addToTimezoneList(tz))
+    }
+
+    const removeTimezoneList = (tz: TimezoneName) => {
+        dispatch(removeFromTimezoneList(tz))
     }
 
     const updateTimezoneWithTime = useCallback((tzone: TimezoneName) => {
@@ -35,5 +58,9 @@ export const useClockAction = () => {
         setLocalTime,
         setLocalTimeZone,
         updateTimezoneWithTime,
+        setToggleTimezoneView,
+        toggleCommandFlag,
+        addTimezoneList,
+        removeTimezoneList,
     }
 }

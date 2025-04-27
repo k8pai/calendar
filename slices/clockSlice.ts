@@ -5,12 +5,17 @@ interface ClockState {
     commandMode: boolean
     time: string
     timezone: TimezoneName
+    clockView?: 'digital' | 'analog'
+    isInTimezoneView: boolean
+    timezoneList?: TimezoneName[]
 }
 
 const initialState: ClockState = {
     commandMode: false,
     time: new Date().toISOString(),
     timezone: 'Asia/Kolkata',
+    isInTimezoneView: false,
+    timezoneList: ['Asia/Kolkata'],
 }
 
 const clockSlice = createSlice({
@@ -29,6 +34,29 @@ const clockSlice = createSlice({
         toggleCommandMode: (state) => {
             state.commandMode = !state.commandMode
         },
+        toggleTimezoneView: (state) => {
+            state.isInTimezoneView = !state.isInTimezoneView
+        },
+        addToTimezoneList: (state, action) => {
+            state.timezoneList?.push(action.payload)
+        },
+        removeFromTimezoneList: (state, action) => {
+            const { timezoneList } = state
+            state.timezoneList = timezoneList?.filter(
+                (tz) => tz !== action.payload
+            )
+        },
+        modifyTimezoneList: (state, action) => {
+            const { timezoneList } = state
+
+            if (timezoneList?.includes(action.payload)) {
+                state.timezoneList = timezoneList.filter(
+                    (tz) => tz !== action.payload
+                )
+            } else {
+                state.timezoneList?.push(action.payload)
+            }
+        },
         resetClock: () => initialState,
     },
 })
@@ -39,6 +67,10 @@ export const {
     resetClock,
     setTime,
     setTimezone,
+    toggleTimezoneView,
+    addToTimezoneList,
+    modifyTimezoneList,
+    removeFromTimezoneList,
 } = clockSlice.actions
 
 export default clockSlice.reducer
