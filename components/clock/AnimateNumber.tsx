@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
@@ -7,13 +8,29 @@ type AnimateNumberProps = {
     initialNumber: number
     padStart?: number
     padEnd?: number
+    size?: 'sm' | 'md' | 'lg' | 'xl' // new: tailwind size keys
+    classNames?: {
+        container?: string
+        digit?: string
+        digitContainer?: string
+    }
 }
+
+const sizeMap = {
+    sm: { height: 48, fontSize: 24 },
+    md: { height: 64, fontSize: 32 },
+    lg: { height: 80, fontSize: 40 },
+    xl: { height: 96, fontSize: 48 },
+} as const
 
 export default function AnimateNumber({
     initialNumber,
     padStart = 0,
     padEnd = 0,
+    size = 'md',
+    classNames = {},
 }: AnimateNumberProps) {
+    const { height, fontSize } = sizeMap[size]
     const formatNumber = (num: number) => {
         let str = num.toString()
         if (padStart > 0) str = str.padStart(padStart, '0')
@@ -34,15 +51,23 @@ export default function AnimateNumber({
 
     return (
         <div className="flex flex-col items-center space-y-4">
-            <div className="relative w-auto h-16 overflow-hidden flex justify-center space-x-1 px-2">
+            <div
+                className={cn(
+                    'relative overflow-hidden flex justify-center px-2',
+                    classNames.container
+                )}
+                style={{ height }}
+            >
                 {number.map((digit, i) => (
                     <motion.div
                         key={number.length - i}
-                        className="relative w-8"
+                        className={cn('relative', classNames.digitContainer)}
                     >
                         <motion.div
                             className="absolute flex flex-col items-center"
-                            animate={{ y: -digit * 64 }}
+                            // animate={{ y: -digit * 64 }}
+
+                            animate={{ y: -parseInt(digit) * height }}
                             transition={{
                                 type: 'spring',
                                 stiffness: 100,
@@ -52,7 +77,15 @@ export default function AnimateNumber({
                             {DIGITS.map((n, i) => (
                                 <div
                                     key={n}
-                                    className="h-16 flex items-center justify-center text-5xl font-bold w-8"
+                                    className={cn(
+                                        'flex h-16 items-center justify-center font-bold w-8',
+                                        classNames.digit
+                                    )}
+                                    style={{
+                                        height,
+                                        // width: height / 2,
+                                        // fontSize,
+                                    }}
                                 >
                                     {n}
                                 </div>
@@ -61,10 +94,6 @@ export default function AnimateNumber({
                     </motion.div>
                 ))}
             </div>
-            {/* <div className="flex space-x-2">
-                <Button onClick={handlePrev}>Prev</Button>
-                <Button onClick={handleNext}>Next</Button>
-            </div> */}
         </div>
     )
 }
