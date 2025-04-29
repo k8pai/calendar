@@ -13,10 +13,11 @@ import { Input } from '@/components/ui/input'
 import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
+import { fuzzyFilter } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
 import { Timezone, TimezoneName } from 'countries-and-timezones'
 import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export function ClockCommands({ countries }: { countries: Timezone[] }) {
     const [command, setCommand] = useState('')
@@ -46,6 +47,11 @@ export function ClockCommands({ countries }: { countries: Timezone[] }) {
         window.addEventListener('keydown', down)
         return () => window.removeEventListener('keydown', down)
     }, [])
+
+    let displayCountries = useMemo(
+        () => fuzzyFilter(countries, command, (item) => item.name).slice(0, 10),
+        [command]
+    )
 
     return (
         <div>
@@ -77,7 +83,7 @@ export function ClockCommands({ countries }: { countries: Timezone[] }) {
                     <CommandList>
                         <CommandEmpty>No results found.</CommandEmpty>
                         <CommandGroup heading="Suggestions">
-                            {countries.map((country, index) => {
+                            {displayCountries.map((country, index) => {
                                 return (
                                     <CommandItem
                                         key={country.name}
