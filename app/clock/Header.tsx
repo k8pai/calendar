@@ -13,7 +13,9 @@ import React, { useMemo } from 'react'
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
-    const { time, timezone } = useAppSelector((state) => state.clock)
+    const { time, timezone, isInTimezoneView } = useAppSelector(
+        (state) => state.clock
+    )
     const countries = useMemo(() => {
         let response = getAllCountriesWithTimezones()
         return response
@@ -27,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
                     orientation="vertical"
                     className="mx-2 data-[orientation=vertical]:h-4"
                 />
-                <ClockCommands countries={countries} />
+                {!isInTimezoneView && <ClockCommands countries={countries} />}
             </motion.div>
 
             <motion.div className="flex-1 flex justify-end items-center gap-5">
