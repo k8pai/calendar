@@ -6,25 +6,22 @@ import { Button } from '@/components/ui/button'
 import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { getAllCountriesWithTimezones } from '@/lib/timezoneUtils'
-import { ChevronDown } from 'lucide-react'
+import { CircleOff, Clock, Minus, Plus } from 'lucide-react'
 import { motion } from 'motion/react'
 import React, { useMemo } from 'react'
 
 interface ClockOptionsProps {}
 
 const ClockOptions: React.FC<ClockOptionsProps> = ({}) => {
-    const { timezone, isInTimezoneView } = useAppSelector(
-        (state) => state.clock
-    )
-    const { setToggleTimezoneView, toggleCommandFlag, addTimezoneList } =
-        useClockAction()
+    const { timezone, isInTimezoneView, commandMode, clockView } =
+        useAppSelector((state) => state.clock)
+    const { setToggleTimezoneView, toggleClockTypeView } = useClockAction()
 
     const countries = useMemo(() => {
         let response = getAllCountriesWithTimezones()
         return response
     }, [])
 
-    console.log('isInTimezoneView', isInTimezoneView)
     return (
         <div className="mb-4 flex justify-between items-center space-x-2 px-4 font-semibold">
             <div>
@@ -38,9 +35,18 @@ const ClockOptions: React.FC<ClockOptionsProps> = ({}) => {
                         stiffness: 50,
                         delay: 0.5,
                     }}
-                    className="text-sm font-mono text-gray-700"
+                    className="text-sm font-mono text-gray-700 flex justify-center items-center gap-2"
                 >
                     {isInTimezoneView ? 'Timezones' : timezone}
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="gap-2 flex size-8 cursor-pointer"
+                        onClick={setToggleTimezoneView}
+                        title="Add Timezone"
+                    >
+                        {isInTimezoneView ? <Minus /> : <Plus />}
+                    </Button>
                 </motion.span>
             </div>
             <motion.div
@@ -55,24 +61,20 @@ const ClockOptions: React.FC<ClockOptionsProps> = ({}) => {
                 }}
                 className="flex items-center gap-4"
             >
-                {/* <div>
-                    {isInTimezoneView && (
-                        <Button variant={'outline'} onClick={toggleCommandFlag}>
-                            <PlusIcon />
-                        </Button>
-                    )}
-                </div> */}
-                {isInTimezoneView && (
+                {isInTimezoneView ? (
                     <div>
                         <TimezoneDropdown countries={countries} />
                     </div>
-                )}
-
-                <div>
-                    <Button variant={'outline'} onClick={setToggleTimezoneView}>
-                        <ChevronDown />
+                ) : (
+                    <Button
+                        variant={'outline'}
+                        className="cursor-pointer"
+                        onClick={toggleClockTypeView}
+                        title="Toggle Clock View"
+                    >
+                        {clockView === 'digital' ? <Clock /> : <CircleOff />}
                     </Button>
-                </div>
+                )}
             </motion.div>
         </div>
     )
