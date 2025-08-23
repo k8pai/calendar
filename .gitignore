@@ -26,6 +26,7 @@
 
 # package-loc.json
 package-lock.json
+./package-lock.json
 
 # debug
 npm-debug.log*
@@ -42,3 +43,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
