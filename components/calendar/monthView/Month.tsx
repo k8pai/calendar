@@ -56,11 +56,13 @@ const Month: React.FC<CalendarProps> = ({ view }) => {
                     return (
                         <div
                             className={cn(
-                                `border border-b-0 rounded-tl-md rounded-tr-md p-2 pb-0 transition-all text-center flex-0`
+                                `border border-b-0 rounded-tl-md rounded-tr-md p-2 pb-0 transition-all text-center flex-0`,
+                                weekday === 'Sat' && 'bg-secondary',
+                                weekday === 'Sun' && 'bg-green-100/50'
                             )}
                             key={index}
                         >
-                            <div className="uppercase font-semibold text-sm">
+                            <div className="uppercase font-bold text-sm">
                                 {weekday}
                             </div>
                         </div>

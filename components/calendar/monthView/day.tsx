@@ -11,7 +11,14 @@ import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { getJulianDateMap } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
-import { format, isEqual, isSameDay, startOfMonth } from 'date-fns'
+import {
+    format,
+    isEqual,
+    isSameDay,
+    isSaturday,
+    isSunday,
+    startOfMonth,
+} from 'date-fns'
 import { motion } from 'motion/react'
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -108,29 +115,29 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
             <ContextMenuTrigger asChild>
                 <motion.div
                     className={cn(
-                        `border border-t-0  p-2 transition-all hover:shadow-md flex flex-col items-center flex-1`,
-                        isSameDay(day, new Date()) && 'bg-secondary font-bold',
+                        `border border-t-0 p-2 transition-all hover:shadow-md flex flex-col items-center flex-1 cursor-pointer`,
+                        isSameDay(day, new Date()) &&
+                            'bg-red-50/50 font-bold shadow-md',
                         index < 7
                             ? 'rounded-br-md rounded-bl-md'
                             : 'rounded-md',
-                        calendarType !== 'gregorian' && 'justify-between'
+                        isEqual(
+                            format(day, 'dd-MMMM-uuuu'),
+                            format(selectedDate, 'dd-MMMM-uuuu')
+                        ) && '',
+                        calendarType !== 'gregorian' && 'justify-between',
+                        isSaturday(day) && 'bg-secondary',
+                        isSunday(day) && 'bg-green-100/50'
                     )}
                     key={`${format(day, 'MMuuuu')}-${
                         isSameDay(day, selectedDate) ? 'flag-' : ''
                     }day`}
                     onClick={() => setDate(day)}
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                    }}
-                    transition={{ duration: 0.1 }}
                 >
                     <div className="flex-1">
                         <span
                             className={cn(
-                                'w-fit p-2 text-center',
+                                'w-fit p-2 text-center font-semibold',
                                 isEqual(
                                     format(day, 'dd-MMMM-uuuu'),
                                     format(selectedDate, 'dd-MMMM-uuuu')
@@ -156,7 +163,8 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
                                 <TooltipWrapper
                                     buttonType="ghost"
                                     value={getCalendarTypeDay(day) ?? ''}
-                                    description={`${calendarType} Type`}
+                                    description={`${calendarType} Date`}
+                                    buttonClassName="cusor-pointer bg-blue-50/50 hover:bg-blue-100/50"
                                 />
                             </span>
                         </div>
