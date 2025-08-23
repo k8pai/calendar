@@ -16,6 +16,7 @@ const initialState: ClockState = {
     timezone: 'Asia/Kolkata',
     isInTimezoneView: false,
     timezoneList: ['Asia/Kolkata'],
+    clockView: 'digital',
 }
 
 const clockSlice = createSlice({
@@ -58,6 +59,10 @@ const clockSlice = createSlice({
             }
         },
         resetClock: () => initialState,
+        toggleClockView: (state) => {
+            state.clockView =
+                state.clockView === 'digital' ? 'analog' : 'digital'
+        },
     },
 })
 
@@ -71,6 +76,7 @@ export const {
     addToTimezoneList,
     modifyTimezoneList,
     removeFromTimezoneList,
+    toggleClockView,
 } = clockSlice.actions
 
 export default clockSlice.reducer

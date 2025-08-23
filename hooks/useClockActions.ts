@@ -4,6 +4,7 @@ import {
     removeFromTimezoneList,
     setTime,
     setTimezone,
+    toggleClockView,
     toggleCommandMode,
     toggleTimezoneView,
 } from '@/slices/clockSlice'
@@ -53,6 +54,10 @@ export const useClockAction = () => {
         }
     }, [])
 
+    const toggleClockTypeView = () => {
+        dispatch(toggleClockView())
+    }
+
     return {
         lastAction: prev,
         setLocalTime,
@@ -62,5 +67,6 @@ export const useClockAction = () => {
         toggleCommandFlag,
         addTimezoneList,
         removeTimezoneList,
+        toggleClockTypeView,
     }
 }
