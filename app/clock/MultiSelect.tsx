@@ -1,6 +1,7 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
+import { Button } from '@/components/ui/button'
 import { Timezone } from 'countries-and-timezones'
 import { AnimatePresence, motion } from 'motion/react'
 
@@ -40,18 +41,17 @@ export function TiSelect({
     }
 
     const handleClick = (option: Timezone) => {
-        // if (!option.disable && option.name !== selected) {
-        // setSelected({ name: option.name, value: option.name })
         onChange(option)
         setIsOpen(false)
-        // }
     }
 
     return (
         <div className={`relative bg-transparent w-full`} ref={componentRef}>
-            <div
+            <Button
+                variant={'outline'}
+                size={'sm'}
                 aria-hidden={isOpen}
-                className={`appearance-none rounded-lg overflow-hidden text-gray-500 py-2 pl-3 pr-10 leading-tight transition border-secondary bg-background outline-secondary`}
+                className={`appearance-none rounded-lg overflow-hidden text-gray-500 py-2 pl-3 pr-10 leading-tight transition border-secondary bg-background outline-secondary cursor-pointer`}
                 onClick={toggleOptions}
             >
                 <span
@@ -59,10 +59,8 @@ export function TiSelect({
                 >
                     {'Add a timezone'}
                 </span>
-                <ChevronDown
-                    className={`absolute inset-y-0 right-0 h-full mx-3 scale-75`}
-                />
-            </div>
+                {isOpen ? <ChevronUp /> : <ChevronDown />}
+            </Button>
             <AnimatePresence>
                 {isOpen && (
                     <motion.div

@@ -10,7 +10,6 @@ import {
     CommandList,
 } from '@/components/ui/command'
 import { Input } from '@/components/ui/input'
-import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { fuzzyFilter } from '@/lib/helpers'
@@ -21,10 +20,9 @@ import { useEffect, useMemo, useState } from 'react'
 
 export function ClockCommands({ countries }: { countries: Timezone[] }) {
     const [command, setCommand] = useState('')
-    const { commandMode } = useAppSelector((state) => state.calendar)
+    const { commandMode } = useAppSelector((state) => state.clock)
 
-    const { toggleCommandFlag } = useCalendarAction()
-    const { setLocalTimeZone } = useClockAction()
+    const { setLocalTimeZone, toggleCommandFlag } = useClockAction()
 
     const toggleCommand = () => {
         toggleCommandFlag()
@@ -82,7 +80,7 @@ export function ClockCommands({ countries }: { countries: Timezone[] }) {
                     />
                     <CommandList>
                         <CommandEmpty>No results found.</CommandEmpty>
-                        <CommandGroup heading="Suggestions">
+                        <CommandGroup heading="Change Timezone">
                             {displayCountries.map((country, index) => {
                                 return (
                                     <CommandItem

@@ -8,12 +8,21 @@ const TimezoneClock = ({ timezone }: { timezone: TimezoneName }) => {
     const [localTime, setLocalTime] = useState(new TZDate(new Date(), timezone))
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        let timer: ReturnType<typeof setTimeout>
+
+        const tick = () => {
             const currentTime = new TZDate(new Date(), timezone)
             setLocalTime(currentTime)
-        }, 1000)
-        return () => clearInterval(interval)
-    }, [localTime])
+
+            // align to next full second
+            const ms = currentTime.getMilliseconds()
+            timer = setTimeout(tick, 1000 - ms)
+        }
+
+        tick() // start loop
+
+        return () => clearTimeout(timer)
+    }, [])
 
     return (
         <div className={cn(`flex-1 flex items-center justify-start font-mono`)}>

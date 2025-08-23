@@ -4,6 +4,7 @@ import TimezoneClock from '@/app/clock/TimezoneClock'
 import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { Trash } from 'lucide-react'
+import { motion } from 'motion/react'
 
 const TimezoneList = () => {
     const { timezone, isInTimezoneView, timezoneList } = useAppSelector(
@@ -12,7 +13,12 @@ const TimezoneList = () => {
     const { removeTimezoneList } = useClockAction()
 
     return (
-        <div className="flex flex-col space-y-3">
+        <motion.div
+            className="flex flex-col space-y-3"
+            animate={{ opacity: isInTimezoneView ? '100' : '0' }}
+            exit={{ opacity: '0' }}
+            transition={{ duration: 1 }}
+        >
             {timezoneList?.map((tz) => (
                 <div
                     key={tz}
@@ -34,7 +40,7 @@ const TimezoneList = () => {
                     </div>
                 </div>
             ))}
-        </div>
+        </motion.div>
     )
 }
 
