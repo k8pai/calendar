@@ -164,7 +164,6 @@ const Day: React.FC<CalendarProps> = ({ day, index, events }) => {
                                     buttonType="ghost"
                                     value={getCalendarTypeDay(day) ?? ''}
                                     description={`${calendarType} Date`}
-                                    buttonClassName="cusor-pointer bg-blue-50/50 hover:bg-blue-100/50"
                                 />
                             </span>
                         </div>

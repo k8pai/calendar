@@ -18,12 +18,13 @@ import * as React from 'react'
 import Logo from '@/components/Logo'
 import { NavMain } from '@/components/nav-main'
 import { NavSecondary } from '@/components/nav-secondary'
+import { NavUser } from '@/components/nav-user'
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarHeader,
     SidebarMenu,
-    SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
@@ -160,28 +161,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            className="data-[slot=sidebar-menu-button]:!p-1.5"
-                        >
-                            <div className="flex items-center gap-2">
-                                <Logo />
-                                {/* <span className="text-base font-semibold">
-                                    Pai
-                                </span> */}
-                            </div>
-                        </SidebarMenuButton>
+                        <Logo />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
                 <NavMain items={data.navMain} />
-                {/* <NavDocuments items={data.documents} /> */}
                 <NavSecondary items={data.navSecondary} className="mt-auto" />
             </SidebarContent>
-            {/* <SidebarFooter>
+            <SidebarFooter>
                 <NavUser user={data.user} />
-            </SidebarFooter> */}
+            </SidebarFooter>
         </Sidebar>
     )
 }
