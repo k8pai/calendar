@@ -23,8 +23,6 @@ const Header: React.FC<HeaderProps> = ({}) => {
     } = useAppSelector((state) => state.calendar)
 
     const getHeader = () => {
-        console.log('calendarType', calendarType)
-
         switch (calendarType) {
             case 'gregorian':
                 if (calendarViewMode === calendarViewModes.YEAR) {
