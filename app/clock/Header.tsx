@@ -1,6 +1,7 @@
 'use client'
 
 import { ClockCommands } from '@/components/clock/ClockCommands'
+import Menu from '@/components/clock/Menu'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
@@ -29,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
                     orientation="vertical"
                     className="mx-2 data-[orientation=vertical]:h-4"
                 />
+                <Menu />
                 {!isInTimezoneView && <ClockCommands countries={countries} />}
             </motion.div>
 
