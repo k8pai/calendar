@@ -8,6 +8,7 @@
         "start": "next start",
         "lint": "next lint"
     },
+    "type": "module",
     "dependencies": {
         "@date-fns/tz": "^1.2.0",
         "@dnd-kit/core": "^6.3.1",

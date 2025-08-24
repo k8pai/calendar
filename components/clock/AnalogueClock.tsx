@@ -49,7 +49,7 @@ const AnalogueClock = ({ className }: { className?: string }) => {
             exit={{ opacity: 0, translateY: '-300px' }}
         >
             <div
-                className="border-3 border-gray-300 rounded-full relative"
+                className="border-3 border-gray-300 rounded-full relative shadow-xl"
                 style={{ width: RADIUS * 2, height: RADIUS * 2 }}
             >
                 {TICKS.map((_, i) => {
@@ -66,7 +66,10 @@ const AnalogueClock = ({ className }: { className?: string }) => {
                     return (
                         <div
                             key={i}
-                            className={`absolute top-1/2 left-1/2 origin-center bg-gray-800/50 -translate-x-1/2 -translate-y-1/2 text-xs`}
+                            className={cn(
+                                `absolute top-1/2 left-1/2 origin-center bg-gray-800/50 -translate-x-1/2 -translate-y-1/2 text-xs`,
+                                isHour ? 'bg-green-800' : 'bg-amber-500'
+                            )}
                             style={{
                                 width: `${tickW}px`,
                                 height: `${tickLen}px`,
@@ -106,7 +109,7 @@ const AnalogueClock = ({ className }: { className?: string }) => {
                 />
                 {/* this is the logic for minute hand. */}
                 <div
-                    className="absolute origin-top top-1/2 left-1/2 bg-gray-800/90 -translate-x-1/2 z-10"
+                    className="absolute origin-top top-1/2 left-1/2 bg-zinc-700/90 shadow-accent -translate-x-1/2 z-10"
                     style={{
                         width: `${MIN_HAND_W}px`,
                         height: `${MIN_HAND_LEN}px`,
@@ -120,7 +123,7 @@ const AnalogueClock = ({ className }: { className?: string }) => {
                 />
                 {/* this is the logic for minute hand's tail part. */}
                 <div
-                    className="absolute origin-bottom top-1/2 left-1/2 bg-gray-800/90 -translate-x-1/2 -translate-y-full z-10"
+                    className="absolute origin-bottom top-1/2 left-1/2 bg-zinc-700/90 shadow-accent -translate-x-1/2 -translate-y-full z-10"
                     style={{
                         width: `${MIN_HAND_W}px`,
                         height: `${RADIUS * 0.2}px`,
@@ -136,7 +139,7 @@ const AnalogueClock = ({ className }: { className?: string }) => {
                 {/* Hour Hand */}
                 {/* this is the logic for minute hand. */}
                 <div
-                    className="absolute origin-top top-1/2 left-1/2 bg-gray-800/90 -translate-x-1/2 z-10"
+                    className="absolute origin-top top-1/2 left-1/2 bg-gray-600/80 shadow-accent -translate-x-1/2 z-10"
                     style={{
                         width: `${HOUR_HAND_W}px`,
                         height: `${HOUR_HAND_LEN}px`,
@@ -150,7 +153,7 @@ const AnalogueClock = ({ className }: { className?: string }) => {
                 />
                 {/* this is the logic for minute hand's tail part. */}
                 <div
-                    className="absolute origin-bottom top-1/2 left-1/2 bg-gray-800/90 -translate-x-1/2 -translate-y-full z-10"
+                    className="absolute origin-bottom top-1/2 left-1/2 bg-gray-600/80 shadow-accent -translate-x-1/2 -translate-y-full z-10"
                     style={{
                         width: `${HOUR_HAND_W}px`,
                         height: `${RADIUS * 0.1}px`,
