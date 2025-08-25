@@ -9,38 +9,45 @@ import { store } from '../../store/store'
 const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
     const dispatch = useAppDispatch()
 
-    const { commandMode } = useAppSelector((state) => state.clock)
+    const { commandMode, clockViewMode, timerFocusOn } = useAppSelector(
+        (state) => state.clock
+    )
 
-    const { toggleCommandFlag } = useClockAction()
+    const { switchClockMode, NextTimerFocusUnit, PreviousTimerFocusUnit } =
+        useClockAction()
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
-                // case 'ArrowLeft':
-                //     if (!commandMode) {
-                //         previous()
-                //     }
-                //     break
-                // case 'ArrowRight':
-                //     if (!commandMode) {
-                //         next()
-                //     }
-                //     break
-                // case 'd':
-                //     if (!commandMode) {
-                //         setDayView()
-                //     }
-                //     break
-                // case 'w':
-                //     if (!commandMode) {
-                //         setWeekView()
-                //     }
-                //     break
-                // case 'm':
-                //     if (!commandMode) {
-                //         setMonthView()
-                //     }
-                //     break
+                case 'F1':
+                    if (!commandMode) {
+                        switchClockMode('clock')
+                    }
+                    break
+                case 'F2':
+                    if (!commandMode) {
+                        switchClockMode('stopwatch')
+                    }
+                    break
+                case 'F3':
+                    if (!commandMode) {
+                        switchClockMode('timer')
+                    }
+                    break
+                case 'ArrowRight':
+                    if (!commandMode && clockViewMode === 'timer') {
+                        console.log(
+                            'timerFocusOn is next timer...',
+                            timerFocusOn
+                        )
+                        NextTimerFocusUnit(timerFocusOn)
+                    }
+                    break
+                case 'ArrowLeft':
+                    if (!commandMode && clockViewMode === 'timer') {
+                        PreviousTimerFocusUnit(timerFocusOn)
+                    }
+                    break
                 // case 'y':
                 //     if (!commandMode) {
                 //         setYearView()
@@ -63,7 +70,7 @@ const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [dispatch])
+    }, [dispatch, timerFocusOn, commandMode])
 
     return <Provider store={store}>{children}</Provider>
 }

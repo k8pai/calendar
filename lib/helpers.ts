@@ -259,3 +259,116 @@ export const fuzzyFilter = <T>(
     !query
         ? list
         : list.filter((item) => fuzzySubsequenceMatch(toStringFn(item), query))
+type Time = { hour: number; minute: number; second: number }
+
+type DecrementTimeUnitArgs = {
+    time: Time
+    unit: 'h' | 'm' | 's'
+    decrementBy: number // usually 1
+}
+
+/**
+ * Decrement a time unit (hour/minute/second) with proper borrow handling.
+ * - Hours clamp at 0 (no negative values).
+ * - Minutes borrow from hours when hitting 0.
+ * - Seconds borrow from minutes (and hours if needed) when hitting 0.
+ */
+export const decrementTimeUnit = ({
+    time,
+    unit,
+    decrementBy,
+}: DecrementTimeUnitArgs): Time => {
+    let { hour, minute, second } = time
+
+    switch (unit) {
+        case 'h':
+            // Decrement hours, clamped at 0
+            return {
+                ...time,
+                hour: Math.max(hour - decrementBy, 0),
+            }
+
+        case 'm':
+            if (minute > 0) {
+                // Normal minute decrement
+                return { ...time, minute: minute - decrementBy }
+            }
+            if (hour > 0) {
+                // Borrow from hour when minute is 0
+                return { ...time, hour: hour - 1, minute: 59 }
+            }
+            // Already at 0:00 → clamp
+            return { ...time, minute: 0 }
+
+        case 's':
+            if (second > 0) {
+                // Normal second decrement
+                return { ...time, second: second - decrementBy }
+            }
+            if (minute > 0) {
+                // Borrow from minute when second is 0
+                return { ...time, minute: minute - 1, second: 59 }
+            }
+            if (hour > 0) {
+                // Borrow from hour when minute and second are 0
+                return { ...time, hour: hour - 1, minute: 59, second: 59 }
+            }
+            // Already at 0:00:00 → clamp
+            return { hour: 0, minute: 0, second: 0 }
+
+        default:
+            return time // fallback
+    }
+}
+
+type IncrementTimeUnitArgs = {
+    time: Time
+    unit: 'h' | 'm' | 's'
+    incrementBy: number // usually 1
+}
+
+/**
+ * Increment a time unit (hour/minute/second) with proper carry handling.
+ * - Hours has no limit, just adds it to whatever valid number.
+ * - Minutes carry over to hours when hitting 60.
+ * - Seconds carry over to minutes (and hours if needed) when hitting 60.
+ */
+export const incrementTimeUnit = ({
+    time,
+    unit,
+    incrementBy,
+}: IncrementTimeUnitArgs): Time => {
+    let { hour, minute, second } = time
+
+    switch (unit) {
+        case 'h':
+            // Increment hours
+            return {
+                ...time,
+                hour: hour + incrementBy,
+            }
+
+        case 'm':
+            if (minute < 59) {
+                // Normal minute increment
+                return { ...time, minute: minute + incrementBy }
+            }
+            // Borrow from hour when minute is 59
+            return { ...time, hour: hour + 1, minute: 0 }
+
+        case 's':
+            if (second < 59) {
+                // Normal second increment
+                return { ...time, second: second + incrementBy }
+            }
+            if (minute < 59) {
+                // Borrow from minute when second is 59
+                return { ...time, minute: minute + 1, second: 0 }
+            }
+            // Borrow from hour when minute and second are 59
+            return { ...time, hour: hour + 1, minute: 0, second: 0 }
+
+        default:
+            return time // fallback
+    }
+}

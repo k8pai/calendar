@@ -2,7 +2,9 @@ import { useAppDispatch } from '@/hooks/useTypedSelectors'
 import {
     addToTimezoneList,
     removeFromTimezoneList,
+    setClockViewMode,
     setTime,
+    setTimerFocusOn,
     setTimezone,
     toggleClockView,
     toggleCommandMode,
@@ -58,6 +60,43 @@ export const useClockAction = () => {
         dispatch(toggleClockView())
     }
 
+    const switchClockMode = (viewMode: 'clock' | 'stopwatch' | 'timer') => {
+        dispatch(setClockViewMode(viewMode))
+    }
+
+    const PreviousTimerFocusUnit = (timerFocusOn: 'h' | 'm' | 's') => {
+        switch (timerFocusOn) {
+            case 'h':
+                dispatch(setTimerFocusOn('s'))
+                break
+            case 'm':
+                dispatch(setTimerFocusOn('h'))
+                break
+            case 's':
+                dispatch(setTimerFocusOn('m'))
+                break
+        }
+    }
+
+    const NextTimerFocusUnit = (timerFocusOn: 'h' | 'm' | 's') => {
+        console.log('NextTimerFocusUnit', timerFocusOn)
+        switch (timerFocusOn) {
+            case 'h':
+                dispatch(setTimerFocusOn('m'))
+                break
+            case 'm':
+                dispatch(setTimerFocusOn('s'))
+                break
+            case 's':
+                dispatch(setTimerFocusOn('h'))
+                break
+        }
+    }
+
+    const setTimerFocusUnit = (unit: 'h' | 'm' | 's') => {
+        dispatch(setTimerFocusOn(unit))
+    }
+
     return {
         lastAction: prev,
         setLocalTime,
@@ -68,5 +107,9 @@ export const useClockAction = () => {
         addTimezoneList,
         removeTimezoneList,
         toggleClockTypeView,
+        switchClockMode,
+        PreviousTimerFocusUnit,
+        NextTimerFocusUnit,
+        setTimerFocusUnit,
     }
 }

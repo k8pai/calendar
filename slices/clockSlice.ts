@@ -5,9 +5,11 @@ interface ClockState {
     commandMode: boolean
     time: string
     timezone: TimezoneName
-    clockView?: 'digital' | 'analog'
     isInTimezoneView: boolean
     timezoneList?: TimezoneName[]
+    clockType?: 'digital' | 'analog'
+    clockViewMode: 'clock' | 'stopwatch' | 'timer'
+    timerFocusOn: 'h' | 'm' | 's'
 }
 
 const initialState: ClockState = {
@@ -16,7 +18,9 @@ const initialState: ClockState = {
     timezone: 'Asia/Kolkata',
     isInTimezoneView: false,
     timezoneList: ['Asia/Kolkata'],
-    clockView: 'digital',
+    clockType: 'digital',
+    clockViewMode: 'timer',
+    timerFocusOn: 'h',
 }
 
 const clockSlice = createSlice({
@@ -60,8 +64,14 @@ const clockSlice = createSlice({
         },
         resetClock: () => initialState,
         toggleClockView: (state) => {
-            state.clockView =
-                state.clockView === 'digital' ? 'analog' : 'digital'
+            state.clockType =
+                state.clockType === 'digital' ? 'analog' : 'digital'
+        },
+        setClockViewMode: (state, action) => {
+            state.clockViewMode = action.payload
+        },
+        setTimerFocusOn: (state, action) => {
+            state.timerFocusOn = action.payload
         },
     },
 })
@@ -77,6 +87,8 @@ export const {
     modifyTimezoneList,
     removeFromTimezoneList,
     toggleClockView,
+    setClockViewMode,
+    setTimerFocusOn,
 } = clockSlice.actions
 
 export default clockSlice.reducer
