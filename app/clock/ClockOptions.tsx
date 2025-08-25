@@ -13,7 +13,7 @@ import React, { useMemo } from 'react'
 interface ClockOptionsProps {}
 
 const ClockOptions: React.FC<ClockOptionsProps> = ({}) => {
-    const { timezone, isInTimezoneView, commandMode, clockView } =
+    const { timezone, isInTimezoneView, commandMode, clockType } =
         useAppSelector((state) => state.clock)
     const { setToggleTimezoneView, toggleClockTypeView } = useClockAction()
 
@@ -72,7 +72,7 @@ const ClockOptions: React.FC<ClockOptionsProps> = ({}) => {
                         onClick={toggleClockTypeView}
                         title="Toggle Clock View"
                     >
-                        {clockView === 'digital' ? <Clock /> : <CircleOff />}
+                        {clockType === 'digital' ? <Clock /> : <CircleOff />}
                     </Button>
                 )}
             </motion.div>
