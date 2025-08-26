@@ -11,7 +11,7 @@ import {
 import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
-import { Clock, Hourglass, Timer } from 'lucide-react'
+import { Clock, Hourglass } from 'lucide-react'
 
 const Menu = () => {
     const { clockViewMode } = useAppSelector((state) => state.clock)
@@ -105,14 +105,14 @@ const Menu = () => {
                             </MenubarShortcut>
                         </MenubarItem>
 
-                        <MenubarItem
+                        {/* <MenubarItem
                             onClick={() => switchClockMode('stopwatch')}
                         >
                             Stopwatch
                             <MenubarShortcut>
                                 <Timer />
                             </MenubarShortcut>
-                        </MenubarItem>
+                        </MenubarItem> */}
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
