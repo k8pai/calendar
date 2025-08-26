@@ -58,15 +58,13 @@ export default function AnimateNumber({
                 )}
                 style={{ height }}
             >
-                {number.map((digit, i) => (
+                {number.map((digit, digitIndex) => (
                     <motion.div
-                        key={number.length - i}
+                        key={`${number.length}-${digitIndex}`}
                         className={cn('relative', classNames.digitContainer)}
                     >
                         <motion.div
                             className="absolute flex flex-col items-center"
-                            // animate={{ y: -digit * 64 }}
-
                             animate={{ y: -parseInt(digit) * height }}
                             transition={{
                                 type: 'spring',
