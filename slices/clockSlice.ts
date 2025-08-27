@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TimezoneName } from 'countries-and-timezones'
 
-interface ClockState {
+export interface ClockState {
     commandMode: boolean
     time: string
     timezone: TimezoneName
@@ -10,6 +10,15 @@ interface ClockState {
     clockType?: 'digital' | 'analog'
     clockViewMode: 'clock' | 'stopwatch' | 'timer'
     timerFocusOn: 'h' | 'm' | 's'
+    timer: {
+        isRunning: boolean
+        time: {
+            hour: number
+            minute: number
+            second: number
+        }
+        duration: number | null
+    }
 }
 
 const initialState: ClockState = {
@@ -21,6 +30,15 @@ const initialState: ClockState = {
     clockType: 'digital',
     clockViewMode: 'timer',
     timerFocusOn: 'h',
+    timer: {
+        isRunning: false,
+        time: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+        },
+        duration: null,
+    },
 }
 
 const clockSlice = createSlice({
@@ -73,6 +91,9 @@ const clockSlice = createSlice({
         setTimerFocusOn: (state, action) => {
             state.timerFocusOn = action.payload
         },
+        setTimerConfigs: (state, action) => {
+            state.timer = { ...state.timer, ...action.payload }
+        },
     },
 })
 
@@ -89,6 +110,7 @@ export const {
     toggleClockView,
     setClockViewMode,
     setTimerFocusOn,
+    setTimerConfigs,
 } = clockSlice.actions
 
 export default clockSlice.reducer

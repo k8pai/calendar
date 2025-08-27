@@ -1,9 +1,11 @@
 import { useAppDispatch } from '@/hooks/useTypedSelectors'
 import {
     addToTimezoneList,
+    ClockState,
     removeFromTimezoneList,
     setClockViewMode,
     setTime,
+    setTimerConfigs,
     setTimerFocusOn,
     setTimezone,
     toggleClockView,
@@ -97,6 +99,10 @@ export const useClockAction = () => {
         dispatch(setTimerFocusOn(unit))
     }
 
+    const updateTimerConfigs = (configs: Partial<ClockState['timer']>) => {
+        dispatch(setTimerConfigs(configs))
+    }
+
     return {
         lastAction: prev,
         setLocalTime,
@@ -111,5 +117,6 @@ export const useClockAction = () => {
         PreviousTimerFocusUnit,
         NextTimerFocusUnit,
         setTimerFocusUnit,
+        updateTimerConfigs,
     }
 }
