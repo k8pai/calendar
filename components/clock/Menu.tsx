@@ -8,25 +8,10 @@ import {
     MenubarShortcut,
     MenubarTrigger,
 } from '@/components/ui/menubar'
-import { useCalendarAction } from '@/hooks/useCalendarActions'
 import { useClockAction } from '@/hooks/useClockActions'
-import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { Clock, Hourglass } from 'lucide-react'
 
 const Menu = () => {
-    const { clockViewMode } = useAppSelector((state) => state.clock)
-    const {
-        previous,
-        next,
-        setDayView,
-        setWeekView,
-        setYearView,
-        setMonthView,
-        setWeekendsView,
-        toggleCommandFlag,
-        reset,
-    } = useCalendarAction()
-
     const { switchClockMode } = useClockAction()
 
     return (
