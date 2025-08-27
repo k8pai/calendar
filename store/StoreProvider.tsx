@@ -1,5 +1,6 @@
 'use client'
 
+import TimerTrackWrapper from '@/components/clock/TimerTrackWrapper'
 import { Toaster } from '@/components/ui/sonner'
 import { useTheme } from 'next-themes'
 import { ReactNode } from 'react'
@@ -15,6 +16,7 @@ const StoreProvider = ({ children }: { children: ReactNode }) => {
                 richColors
                 theme={resolvedTheme as ToasterProps['theme']}
             />
+            <TimerTrackWrapper />
         </Provider>
     )
 }

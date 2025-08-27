@@ -10,9 +10,8 @@ import { useEffect, useRef } from 'react'
 
 const Timer = ({ className }: { className?: string }) => {
     const {
-        timezone,
         timerFocusOn,
-        timer: { isRunning, time: timeUnits, duration },
+        timer: { isRunning, time: timeUnits },
     } = useAppSelector((state) => state.clock)
     const { setTimerFocusUnit, updateTimerConfigs } = useClockAction()
     const stateRef = useRef({ timeUnits, timerFocusOn }) // Store latest state
@@ -105,6 +104,7 @@ const Timer = ({ className }: { className?: string }) => {
                 ) {
                     updateTimerConfigs({
                         isRunning: !isRunning,
+                        duration: timeUnits,
                     })
                 }
             }
@@ -124,30 +124,6 @@ const Timer = ({ className }: { className?: string }) => {
             }
         }
     }, [isRunning, stateRef])
-
-    useEffect(() => {
-        if (isRunning === true) {
-            const interval = setInterval(() => {
-                let time = decrementTimeUnit({
-                    time: timeUnits,
-                    unit: 's',
-                    decrementBy: 1,
-                })
-                updateTimerConfigs({
-                    isRunning:
-                        time.hour === 0 &&
-                        time.minute === 0 &&
-                        time.second === 0
-                            ? false
-                            : true,
-                    duration: null,
-                    time: time,
-                })
-            }, 1000)
-
-            return () => clearInterval(interval)
-        }
-    }, [isRunning, timeUnits])
 
     return (
         <motion.div

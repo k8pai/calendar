@@ -16,6 +16,7 @@ import { tz } from '@date-fns/tz'
 import { TimezoneName } from 'countries-and-timezones'
 import { parseISO } from 'date-fns'
 import { useCallback, useState } from 'react'
+import { toast } from 'sonner'
 
 export const useClockAction = () => {
     const dispatch = useAppDispatch()
@@ -99,7 +100,15 @@ export const useClockAction = () => {
         dispatch(setTimerFocusOn(unit))
     }
 
-    const updateTimerConfigs = (configs: Partial<ClockState['timer']>) => {
+    const updateTimerConfigs = (
+        configs: Partial<ClockState['timer']>,
+        showToast?: boolean,
+        toastMessage?: string
+    ) => {
+        if (showToast === true) {
+            // Show toast notification
+            toast.success(toastMessage || 'Time up!')
+        }
         dispatch(setTimerConfigs(configs))
     }
 

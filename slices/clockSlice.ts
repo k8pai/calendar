@@ -17,7 +17,11 @@ export interface ClockState {
             minute: number
             second: number
         }
-        duration: number | null
+        duration: {
+            hour: number
+            minute: number
+            second: number
+        }
     }
 }
 
@@ -37,7 +41,11 @@ const initialState: ClockState = {
             minute: 0,
             second: 0,
         },
-        duration: null,
+        duration: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+        },
     },
 }
 
