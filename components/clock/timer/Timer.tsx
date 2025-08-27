@@ -7,12 +7,8 @@ import { decrementTimeUnit, incrementTimeUnit } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-const RADIUS = 250
-const TICKS = Array.from({ length: 60 }, (_, i) => i) // 60 TICKS for minutes/seconds
 
 const Timer = ({ className }: { className?: string }) => {
-    // const [timerFocusOn, setTimerFocusUnit] = useState<'h' | 'm' | 's'>('h')
-
     const { timezone, timerFocusOn } = useAppSelector((state) => state.clock)
     const { setTimerFocusUnit } = useClockAction()
     const [timerConfig, setTimerConfig] = useState({
