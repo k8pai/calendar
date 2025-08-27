@@ -32,7 +32,9 @@ const DigitalClock = ({ className }: { className?: string }) => {
                 `flex-1 flex items-center justify-center text-5xl font-mono`,
                 className
             )}
-            exit={{ opacity: 0, translateY: '-300px' }}
+            initial={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
         >
             <div className="relative flex justify-center items-start gap-2">
                 <div className="flex flex-col items-center justify-center gap-5">

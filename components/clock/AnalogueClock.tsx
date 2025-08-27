@@ -46,10 +46,12 @@ const AnalogueClock = ({ className }: { className?: string }) => {
                 `flex-1 flex items-center justify-center text-5xl font-mono`,
                 className
             )}
-            exit={{ opacity: 0, translateY: '-300px' }}
+            initial={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
         >
             <div
-                className="border-3 border-gray-300 rounded-full relative shadow-xl"
+                className="border-3 border-gray-300 rounded-full h-full w-full relative shadow-xl"
                 style={{ width: RADIUS * 2, height: RADIUS * 2 }}
             >
                 {TICKS.map((_, i) => {
