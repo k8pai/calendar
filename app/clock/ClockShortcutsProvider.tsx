@@ -70,7 +70,7 @@ const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [dispatch, timerFocusOn, commandMode])
+    }, [dispatch, timerFocusOn, commandMode, clockViewMode])
 
     return <Provider store={store}>{children}</Provider>
 }
