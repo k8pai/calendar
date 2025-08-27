@@ -19,17 +19,17 @@ const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
-                case 'F1':
+                case 'C':
                     if (!commandMode) {
                         switchClockMode('clock')
                     }
                     break
-                case 'F2':
+                case 'S':
                     if (!commandMode) {
                         switchClockMode('stopwatch')
                     }
                     break
-                case 'F3':
+                case 'T':
                     if (!commandMode) {
                         switchClockMode('timer')
                     }

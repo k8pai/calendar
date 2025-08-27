@@ -9,7 +9,6 @@ import {
     MenubarTrigger,
 } from '@/components/ui/menubar'
 import { useClockAction } from '@/hooks/useClockActions'
-import { Clock, Hourglass } from 'lucide-react'
 
 const Menu = () => {
     const { switchClockMode } = useClockAction()
@@ -79,14 +78,14 @@ const Menu = () => {
                         <MenubarItem onClick={() => switchClockMode('timer')}>
                             Timer{' '}
                             <MenubarShortcut>
-                                <Hourglass />
+                                {/* <Hourglass /> */}T
                             </MenubarShortcut>
                         </MenubarItem>
 
                         <MenubarItem onClick={() => switchClockMode('clock')}>
                             Clock{' '}
                             <MenubarShortcut>
-                                <Clock />
+                                {/* <Clock /> */}C
                             </MenubarShortcut>
                         </MenubarItem>
 
