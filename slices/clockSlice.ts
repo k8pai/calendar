@@ -31,8 +31,8 @@ const initialState: ClockState = {
     timezone: 'Asia/Kolkata',
     isInTimezoneView: false,
     timezoneList: ['Asia/Kolkata'],
-    clockType: 'digital',
-    clockViewMode: 'timer',
+    clockType: 'analog',
+    clockViewMode: 'clock',
     timerFocusOn: 'h',
     timer: {
         isRunning: false,
