@@ -102,6 +102,13 @@ const clockSlice = createSlice({
         setTimerConfigs: (state, action) => {
             state.timer = { ...state.timer, ...action.payload }
         },
+        resetTimerConfigTime: (state) => {
+            state.timer.time = {
+                hour: 0,
+                minute: 0,
+                second: 0,
+            }
+        },
     },
 })
 
@@ -119,6 +126,7 @@ export const {
     setClockViewMode,
     setTimerFocusOn,
     setTimerConfigs,
+    resetTimerConfigTime,
 } = clockSlice.actions
 
 export default clockSlice.reducer

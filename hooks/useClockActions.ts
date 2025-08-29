@@ -3,6 +3,7 @@ import {
     addToTimezoneList,
     ClockState,
     removeFromTimezoneList,
+    resetTimerConfigTime,
     setClockViewMode,
     setTime,
     setTimerConfigs,
@@ -112,6 +113,10 @@ export const useClockAction = () => {
         dispatch(setTimerConfigs(configs))
     }
 
+    const resetTimerTime = () => {
+        dispatch(resetTimerConfigTime())
+    }
+
     return {
         lastAction: prev,
         setLocalTime,
@@ -127,5 +132,6 @@ export const useClockAction = () => {
         NextTimerFocusUnit,
         setTimerFocusUnit,
         updateTimerConfigs,
+        resetTimerTime,
     }
 }

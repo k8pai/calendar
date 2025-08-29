@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { Pause, Play, RotateCcw } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
+import QuickSuggestions from './QuickSuggestions'
 
 const Timer = ({ className }: { className?: string }) => {
     const {
@@ -165,10 +166,11 @@ const Timer = ({ className }: { className?: string }) => {
     return (
         <motion.div
             className={cn(
-                `flex-1 flex items-center justify-center text-5xl font-mono`,
+                `flex-1 flex-col flex items-center justify-center font-mono`,
                 className
             )}
         >
+            <QuickSuggestions />
             <input
                 type="text"
                 className="absolute opacity-0 pointer-events-none"
@@ -176,14 +178,20 @@ const Timer = ({ className }: { className?: string }) => {
                 onChange={(e) => handleInputChange(e.target.value)}
                 ref={inputRef}
             />
-            <div className="flex flex-col items-center justify-center mr-4 gap-6">
+            <div className="flex-1 flex flex-col items-center justify-center mr-4 gap-6">
                 <div
                     className={cn(
                         'relative rounded-full aspect-square flex flex-col items-center justify-center px-4 transition-all',
                         isRunning && 'border-2 shadow-md'
                     )}
                 >
-                    <div className="flex justify-center items-center gap-2">
+                    <motion.div
+                        className="flex justify-center items-center gap-2"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ delay: 0.35 }}
+                    >
                         <div
                             className="flex flex-col items-center justify-center cursor-pointer"
                             onClick={() => setTimerFocusUnit('h')}
@@ -264,9 +272,15 @@ const Timer = ({ className }: { className?: string }) => {
                                 seconds
                             </span>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
-                <div className="flex items-center justify-center gap-4">
+                <motion.div
+                    className="flex items-center justify-center gap-4"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ delay: 0.75 }}
+                >
                     <Button
                         size={'icon'}
                         variant="outline"
@@ -295,7 +309,7 @@ const Timer = ({ className }: { className?: string }) => {
                     >
                         <RotateCcw className="size-6" />
                     </Button>
-                </div>
+                </motion.div>
             </div>
         </motion.div>
     )
