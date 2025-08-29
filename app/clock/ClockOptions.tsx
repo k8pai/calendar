@@ -2,6 +2,11 @@
 
 import TimezoneDropdown from '@/app/clock/TimezoneDropdown'
 import { Button } from '@/components/ui/button'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
@@ -72,18 +77,30 @@ const ClockOptions: React.FC<ClockOptionsProps> = ({}) => {
                     </div>
                 ) : (
                     clockViewMode === 'clock' && (
-                        <Button
-                            variant={'outline'}
-                            className="cursor-pointer"
-                            onClick={toggleClockTypeView}
-                            title="Toggle Clock View"
-                        >
-                            {clockType === 'digital' ? (
-                                <Clock />
-                            ) : (
-                                <CircleOff />
-                            )}
-                        </Button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant={'outline'}
+                                    className="cursor-pointer"
+                                    onClick={toggleClockTypeView}
+                                >
+                                    {clockType === 'digital' ? (
+                                        <Clock />
+                                    ) : (
+                                        <CircleOff />
+                                    )}
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent
+                                className="bg-background text-accent border-accent"
+                                align="end"
+                                side="bottom"
+                            >
+                                {clockType === 'digital'
+                                    ? 'Analog View'
+                                    : 'Digital View'}
+                            </TooltipContent>
+                        </Tooltip>
                     )
                 )}
             </motion.div>
