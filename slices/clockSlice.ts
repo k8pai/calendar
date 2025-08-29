@@ -11,7 +11,7 @@ export interface ClockState {
     clockViewMode: 'clock' | 'stopwatch' | 'timer'
     timerFocusOn: 'h' | 'm' | 's'
     timer: {
-        isRunning: boolean
+        isRunning: boolean | null
         time: {
             hour: number
             minute: number
@@ -35,7 +35,7 @@ const initialState: ClockState = {
     clockViewMode: 'clock',
     timerFocusOn: 'h',
     timer: {
-        isRunning: false,
+        isRunning: null,
         time: {
             hour: 0,
             minute: 0,

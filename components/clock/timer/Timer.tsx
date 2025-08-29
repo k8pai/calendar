@@ -136,7 +136,7 @@ const Timer = ({ className }: { className?: string }) => {
                 ) {
                     updateTimerConfigs({
                         isRunning: !isRunning,
-                        duration: timeUnits,
+                        ...(isRunning === null && { duration: timeUnits }),
                     })
                 }
             }
@@ -286,7 +286,12 @@ const Timer = ({ className }: { className?: string }) => {
                         variant="outline"
                         className="size-12 rounded-full cursor-pointer"
                         onClick={() =>
-                            updateTimerConfigs({ isRunning: !isRunning })
+                            updateTimerConfigs({
+                                isRunning: !isRunning,
+                                ...(isRunning === null && {
+                                    duration: timeUnits,
+                                }),
+                            })
                         }
                         disabled={
                             timeUnits.hour === 0 &&
@@ -305,7 +310,12 @@ const Timer = ({ className }: { className?: string }) => {
                         size={'icon'}
                         variant="outline"
                         className="size-12 rounded-full cursor-pointer"
-                        onClick={() => updateTimerConfigs({ time: duration })}
+                        onClick={() =>
+                            updateTimerConfigs({
+                                time: duration,
+                                isRunning: null,
+                            })
+                        }
                     >
                         <RotateCcw className="size-6" />
                     </Button>

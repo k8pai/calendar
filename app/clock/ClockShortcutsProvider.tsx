@@ -36,10 +36,6 @@ const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
                     break
                 case 'ArrowRight':
                     if (!commandMode && clockViewMode === 'timer') {
-                        console.log(
-                            'timerFocusOn is next timer...',
-                            timerFocusOn
-                        )
                         NextTimerFocusUnit(timerFocusOn)
                     }
                     break
