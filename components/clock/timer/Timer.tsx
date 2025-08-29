@@ -19,6 +19,35 @@ const Timer = ({ className }: { className?: string }) => {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
     const longPressRef = useRef<boolean | null>(null)
+    const inputRef = useRef<HTMLInputElement>(null)
+
+    const timerUnitMap: Record<typeof timerFocusOn, keyof typeof timeUnits> = {
+        h: 'hour',
+        m: 'minute',
+        s: 'second',
+    }
+
+    const handleInputChange = (value: string) => {
+        if (!/^\d*$/.test(value)) return // Only allow numeric input
+
+        if (timerFocusOn === 's' || timerFocusOn === 'm') {
+            value = Number(value) < 60 ? value : (Number(value) % 10).toString()
+
+            updateTimerConfigs({
+                time: {
+                    ...timeUnits,
+                    [timerUnitMap[timerFocusOn]]: Number(value),
+                },
+            })
+        } else if (timerFocusOn === 'h') {
+            updateTimerConfigs({
+                time: {
+                    ...timeUnits,
+                    [timerUnitMap[timerFocusOn]]: Number(value),
+                },
+            })
+        }
+    }
 
     useEffect(() => {
         stateRef.current = { timeUnits, timerFocusOn }
@@ -125,14 +154,26 @@ const Timer = ({ className }: { className?: string }) => {
         }
     }, [isRunning, stateRef])
 
+    useEffect(() => {
+        if (inputRef.current !== null) {
+            inputRef.current.focus()
+        }
+    }, [timerFocusOn])
+
     return (
         <motion.div
             className={cn(
                 `flex-1 flex items-center justify-center text-5xl font-mono`,
                 className
             )}
-            exit={{ opacity: 0, translateY: '-300px' }}
         >
+            <input
+                type="text"
+                className="absolute opacity-0 pointer-events-none"
+                value={timeUnits[timerUnitMap[timerFocusOn]]}
+                onChange={(e) => handleInputChange(e.target.value)}
+                ref={inputRef}
+            />
             <div className="flex flex-col items-center justify-center mr-4">
                 <div
                     className={cn(
