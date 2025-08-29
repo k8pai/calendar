@@ -1,17 +1,19 @@
 'use client'
 
 import AnimateNumber from '@/components/clock/AnimateNumber'
+import { Button } from '@/components/ui/button'
 import { useClockAction } from '@/hooks/useClockActions'
 import { useAppSelector } from '@/hooks/useTypedSelectors'
 import { decrementTimeUnit, incrementTimeUnit } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
+import { Pause, Play, RotateCcw } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 
 const Timer = ({ className }: { className?: string }) => {
     const {
         timerFocusOn,
-        timer: { isRunning, time: timeUnits },
+        timer: { isRunning, time: timeUnits, duration },
     } = useAppSelector((state) => state.clock)
     const { setTimerFocusUnit, updateTimerConfigs } = useClockAction()
     const stateRef = useRef({ timeUnits, timerFocusOn }) // Store latest state
@@ -174,7 +176,7 @@ const Timer = ({ className }: { className?: string }) => {
                 onChange={(e) => handleInputChange(e.target.value)}
                 ref={inputRef}
             />
-            <div className="flex flex-col items-center justify-center mr-4">
+            <div className="flex flex-col items-center justify-center mr-4 gap-6">
                 <div
                     className={cn(
                         'relative rounded-full aspect-square flex flex-col items-center justify-center px-4 transition-all',
@@ -263,6 +265,36 @@ const Timer = ({ className }: { className?: string }) => {
                             </span>
                         </div>
                     </div>
+                </div>
+                <div className="flex items-center justify-center gap-4">
+                    <Button
+                        size={'icon'}
+                        variant="outline"
+                        className="size-12 rounded-full cursor-pointer"
+                        onClick={() =>
+                            updateTimerConfigs({ isRunning: !isRunning })
+                        }
+                        disabled={
+                            timeUnits.hour === 0 &&
+                            timeUnits.minute === 0 &&
+                            timeUnits.second === 0 &&
+                            isRunning === false
+                        }
+                    >
+                        {isRunning ? (
+                            <Pause className="size-6" />
+                        ) : (
+                            <Play className="size-6" />
+                        )}
+                    </Button>
+                    <Button
+                        size={'icon'}
+                        variant="outline"
+                        className="size-12 rounded-full cursor-pointer"
+                        onClick={() => updateTimerConfigs({ time: duration })}
+                    >
+                        <RotateCcw className="size-6" />
+                    </Button>
                 </div>
             </div>
         </motion.div>
