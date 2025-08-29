@@ -21,7 +21,8 @@ const TimerTrackWrapper = () => {
                     unit: 's',
                     decrementBy: 1,
                 })
-                let timerEnded = hour === 0 && minute === 0 && second === 0
+                let timerEnded =
+                    time.hour === 0 && time.minute === 0 && time.second === 0
                 updateTimerConfigs(
                     {
                         isRunning: !timerEnded,
