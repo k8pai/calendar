@@ -49,7 +49,7 @@ const QuickSuggestions = () => {
                 >
                     <Button
                         variant={'outline'}
-                        className="px-3 py-1.5 rounded-full cursor-pointer shadow-xs bg-secondary-foreground hover:shadow-md"
+                        className="px-3 py-1.5 rounded-full cursor-pointer shadow-xs bg-secondary hover:shadow-md"
                         onClick={() => handleQuickSuggestionClick(suggestion)}
                     >
                         {suggestion.label}
