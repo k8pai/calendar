@@ -285,22 +285,31 @@ const Timer = ({ className }: { className?: string }) => {
                         size={'icon'}
                         variant="outline"
                         className="size-12 rounded-full cursor-pointer"
-                        onClick={() =>
-                            updateTimerConfigs({
-                                isRunning: !isRunning,
-                                ...(isRunning === null && {
-                                    duration: timeUnits,
-                                }),
-                            })
-                        }
+                        onClick={() => {
+                            if (
+                                !(
+                                    timeUnits.hour === 0 &&
+                                    timeUnits.minute === 0 &&
+                                    timeUnits.second === 0 &&
+                                    isRunning === false
+                                )
+                            ) {
+                                updateTimerConfigs({
+                                    isRunning: !isRunning,
+                                    ...(isRunning === null && {
+                                        duration: timeUnits,
+                                    }),
+                                })
+                            }
+                        }}
                         disabled={
                             timeUnits.hour === 0 &&
                             timeUnits.minute === 0 &&
                             timeUnits.second === 0 &&
-                            isRunning === false
+                            (isRunning === false || isRunning === null)
                         }
                     >
-                        {isRunning ? (
+                        {isRunning === true ? (
                             <Pause className="size-6" />
                         ) : (
                             <Play className="size-6" />
