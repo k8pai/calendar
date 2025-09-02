@@ -164,171 +164,171 @@ const Timer = ({ className }: { className?: string }) => {
     }, [timerFocusOn])
 
     return (
-        <motion.div
-            className={cn(
-                `flex-1 flex-col flex items-center justify-center font-mono`,
-                className
-            )}
-        >
-            <QuickSuggestions />
-            <input
-                type="text"
-                className="absolute opacity-0 pointer-events-none"
-                value={timeUnits[timerUnitMap[timerFocusOn]]}
-                onChange={(e) => handleInputChange(e.target.value)}
-                ref={inputRef}
-            />
-            <div className="flex-1 flex flex-col items-center justify-center mr-4 gap-6">
-                <div
-                    className={cn(
-                        'relative rounded-full aspect-square flex flex-col items-center justify-center px-4 transition-all',
-                        isRunning && 'border-2 shadow-md'
-                    )}
-                >
+        <motion.div className={cn(`flex-1 flex font-mono`, className)}>
+            <div className="flex-1 flex flex-col items-center justify-center relative">
+                <QuickSuggestions />
+                <input
+                    type="text"
+                    className="absolute opacity-0 pointer-events-none"
+                    value={timeUnits[timerUnitMap[timerFocusOn]]}
+                    onChange={(e) => handleInputChange(e.target.value)}
+                    ref={inputRef}
+                />
+                <div className="flex-1 flex flex-col items-center justify-center mr-4 gap-6">
+                    <div
+                        className={cn(
+                            'relative rounded-full aspect-square flex flex-col items-center justify-center px-4 transition-all',
+                            isRunning && 'border-2 shadow-md'
+                        )}
+                    >
+                        <motion.div
+                            className="flex justify-center items-center gap-2"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ delay: 0.35 }}
+                        >
+                            <div
+                                className="flex flex-col items-center justify-center cursor-pointer"
+                                onClick={() => setTimerFocusUnit('h')}
+                            >
+                                <AnimateNumber
+                                    initialNumber={timeUnits.hour}
+                                    padStart={2}
+                                    size="md"
+                                    classNames={{
+                                        digit: cn(
+                                            'text-5xl',
+                                            timerFocusOn !== 'h' &&
+                                                'text-gray-500'
+                                        ),
+                                        digitContainer: 'w-8',
+                                    }}
+                                />
+                                <span
+                                    className={cn(
+                                        'text-sm font-mono text-gray-500',
+                                        timerFocusOn === 'h' &&
+                                            'text-black font-bold'
+                                    )}
+                                >
+                                    hours
+                                </span>
+                            </div>
+                            <span>:</span>
+                            <div
+                                className="flex flex-col items-center justify-center cursor-pointer"
+                                onClick={() => setTimerFocusUnit('m')}
+                            >
+                                <AnimateNumber
+                                    initialNumber={timeUnits.minute}
+                                    padStart={2}
+                                    size="md"
+                                    classNames={{
+                                        digit: cn(
+                                            'text-5xl',
+                                            timerFocusOn !== 'm' &&
+                                                'text-gray-500'
+                                        ),
+                                        digitContainer: 'w-8',
+                                    }}
+                                />
+                                <span
+                                    className={cn(
+                                        'text-sm font-mono text-gray-500',
+                                        timerFocusOn === 'm' &&
+                                            'text-black font-bold'
+                                    )}
+                                >
+                                    minutes
+                                </span>
+                            </div>
+                            <span>:</span>
+                            <div
+                                className="flex flex-col items-center justify-center cursor-pointer"
+                                onClick={() => setTimerFocusUnit('s')}
+                            >
+                                <AnimateNumber
+                                    initialNumber={timeUnits.second}
+                                    padStart={2}
+                                    size="md"
+                                    classNames={{
+                                        digit: cn(
+                                            'text-5xl',
+                                            timerFocusOn !== 's' &&
+                                                'text-gray-500'
+                                        ),
+                                        digitContainer: 'w-8',
+                                    }}
+                                />
+                                <span
+                                    className={cn(
+                                        'text-sm font-mono text-gray-500',
+                                        timerFocusOn === 's' &&
+                                            'text-black font-bold'
+                                    )}
+                                >
+                                    seconds
+                                </span>
+                            </div>
+                        </motion.div>
+                    </div>
                     <motion.div
-                        className="flex justify-center items-center gap-2"
+                        className="flex items-center justify-center gap-4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ delay: 0.35 }}
+                        transition={{ delay: 0.75 }}
                     >
-                        <div
-                            className="flex flex-col items-center justify-center cursor-pointer"
-                            onClick={() => setTimerFocusUnit('h')}
+                        <Button
+                            size={'icon'}
+                            variant="outline"
+                            className="size-12 rounded-full cursor-pointer"
+                            onClick={() => {
+                                if (
+                                    !(
+                                        timeUnits.hour === 0 &&
+                                        timeUnits.minute === 0 &&
+                                        timeUnits.second === 0 &&
+                                        isRunning === false
+                                    )
+                                ) {
+                                    updateTimerConfigs({
+                                        isRunning: !isRunning,
+                                        ...(isRunning === null && {
+                                            duration: timeUnits,
+                                        }),
+                                    })
+                                }
+                            }}
+                            disabled={
+                                timeUnits.hour === 0 &&
+                                timeUnits.minute === 0 &&
+                                timeUnits.second === 0 &&
+                                (isRunning === false || isRunning === null)
+                            }
                         >
-                            <AnimateNumber
-                                initialNumber={timeUnits.hour}
-                                padStart={2}
-                                size="md"
-                                classNames={{
-                                    digit: cn(
-                                        'text-5xl',
-                                        timerFocusOn !== 'h' && 'text-gray-500'
-                                    ),
-                                    digitContainer: 'w-8',
-                                }}
-                            />
-                            <span
-                                className={cn(
-                                    'text-sm font-mono text-gray-500',
-                                    timerFocusOn === 'h' &&
-                                        'text-black font-bold'
-                                )}
-                            >
-                                hours
-                            </span>
-                        </div>
-                        <span>:</span>
-                        <div
-                            className="flex flex-col items-center justify-center cursor-pointer"
-                            onClick={() => setTimerFocusUnit('m')}
-                        >
-                            <AnimateNumber
-                                initialNumber={timeUnits.minute}
-                                padStart={2}
-                                size="md"
-                                classNames={{
-                                    digit: cn(
-                                        'text-5xl',
-                                        timerFocusOn !== 'm' && 'text-gray-500'
-                                    ),
-                                    digitContainer: 'w-8',
-                                }}
-                            />
-                            <span
-                                className={cn(
-                                    'text-sm font-mono text-gray-500',
-                                    timerFocusOn === 'm' &&
-                                        'text-black font-bold'
-                                )}
-                            >
-                                minutes
-                            </span>
-                        </div>
-                        <span>:</span>
-                        <div
-                            className="flex flex-col items-center justify-center cursor-pointer"
-                            onClick={() => setTimerFocusUnit('s')}
-                        >
-                            <AnimateNumber
-                                initialNumber={timeUnits.second}
-                                padStart={2}
-                                size="md"
-                                classNames={{
-                                    digit: cn(
-                                        'text-5xl',
-                                        timerFocusOn !== 's' && 'text-gray-500'
-                                    ),
-                                    digitContainer: 'w-8',
-                                }}
-                            />
-                            <span
-                                className={cn(
-                                    'text-sm font-mono text-gray-500',
-                                    timerFocusOn === 's' &&
-                                        'text-black font-bold'
-                                )}
-                            >
-                                seconds
-                            </span>
-                        </div>
-                    </motion.div>
-                </div>
-                <motion.div
-                    className="flex items-center justify-center gap-4"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ delay: 0.75 }}
-                >
-                    <Button
-                        size={'icon'}
-                        variant="outline"
-                        className="size-12 rounded-full cursor-pointer"
-                        onClick={() => {
-                            if (
-                                !(
-                                    timeUnits.hour === 0 &&
-                                    timeUnits.minute === 0 &&
-                                    timeUnits.second === 0 &&
-                                    isRunning === false
-                                )
-                            ) {
+                            {isRunning === true ? (
+                                <Pause className="size-6" />
+                            ) : (
+                                <Play className="size-6" />
+                            )}
+                        </Button>
+                        <Button
+                            size={'icon'}
+                            variant="outline"
+                            className="size-12 rounded-full cursor-pointer"
+                            onClick={() =>
                                 updateTimerConfigs({
-                                    isRunning: !isRunning,
-                                    ...(isRunning === null && {
-                                        duration: timeUnits,
-                                    }),
+                                    time: duration,
+                                    isRunning: null,
                                 })
                             }
-                        }}
-                        disabled={
-                            timeUnits.hour === 0 &&
-                            timeUnits.minute === 0 &&
-                            timeUnits.second === 0 &&
-                            (isRunning === false || isRunning === null)
-                        }
-                    >
-                        {isRunning === true ? (
-                            <Pause className="size-6" />
-                        ) : (
-                            <Play className="size-6" />
-                        )}
-                    </Button>
-                    <Button
-                        size={'icon'}
-                        variant="outline"
-                        className="size-12 rounded-full cursor-pointer"
-                        onClick={() =>
-                            updateTimerConfigs({
-                                time: duration,
-                                isRunning: null,
-                            })
-                        }
-                    >
-                        <RotateCcw className="size-6" />
-                    </Button>
-                </motion.div>
+                        >
+                            <RotateCcw className="size-6" />
+                        </Button>
+                    </motion.div>
+                </div>
             </div>
         </motion.div>
     )
