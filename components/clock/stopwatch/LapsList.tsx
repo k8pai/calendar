@@ -8,10 +8,10 @@ const LapsList = ({ list }: { list: number[] }) => {
             .padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`
     }
 
-    return (
-        <div className="w-full max-w-xs">
+    return list.length > 0 ? (
+        <div className="w-full mx-auto px-10">
             <h3 className="text-3xl font-semibold mb-2">Laps</h3>
-            <ul className="list-decimal list-inside">
+            <ul className="list-disc list-inside">
                 {list.map((lap, index) => (
                     <li key={index} className="text-base">
                         {formatTime(lap)}
@@ -19,7 +19,7 @@ const LapsList = ({ list }: { list: number[] }) => {
                 ))}
             </ul>
         </div>
-    )
+    ) : null
 }
 
 export default LapsList

@@ -62,10 +62,10 @@ const StopWatch = () => {
 
     return (
         <div className="flex flex-col items-center p-4 rounded-lg">
-            <div className="text-5xl font-mono font-semibold mb-4">
+            <div className="text-5xl font-mono font-semibold my-10">
                 {formatTime(elapsedTime)}
             </div>
-            <div className="space-x-4">
+            <div className="space-x-4 mb-10">
                 <Button
                     size={'icon'}
                     variant="outline"
