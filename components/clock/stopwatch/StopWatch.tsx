@@ -1,4 +1,7 @@
+import LapsList from '@/components/clock/stopwatch/LapsList'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { Flag, Pause, Play, RotateCcw } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 const StopWatch = () => {
@@ -9,21 +12,17 @@ const StopWatch = () => {
     const startTimeRef = useRef<number>(0)
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-    const startStopwatch = () => {
-        if (!isRunning) {
+    const toggleStopWatch = () => {
+        if (isRunning && intervalRef.current) {
+            clearInterval(intervalRef.current)
+            setIsRunning(false)
+        } else if (!isRunning) {
             startTimeRef.current = Date.now() - elapsedTime
             intervalRef.current = setInterval(() => {
                 elapsedTimeRef.current = Date.now() - startTimeRef.current
                 setElapsedTime(elapsedTimeRef.current)
             }, 10)
             setIsRunning(true)
-        }
-    }
-
-    const stopStopwatch = () => {
-        if (isRunning && intervalRef.current) {
-            clearInterval(intervalRef.current)
-            setIsRunning(false)
         }
     }
 
@@ -60,6 +59,7 @@ const StopWatch = () => {
             }
         }
     }, [])
+
     return (
         <div className="flex flex-col items-center p-4 rounded-lg">
             <div className="text-5xl font-mono font-semibold mb-4">
@@ -67,62 +67,42 @@ const StopWatch = () => {
             </div>
             <div className="space-x-4">
                 <Button
-                    variant={'outline'}
-                    className={`rounded ${
-                        isRunning
-                            ? 'bg-gray-400'
-                            : 'bg-green-500 hover:bg-green-600'
-                    }`}
-                    onClick={startStopwatch}
+                    size={'icon'}
+                    variant="outline"
+                    className="size-12 rounded-full cursor-pointer"
+                    onClick={toggleStopWatch}
                     disabled={isRunning}
                 >
-                    Start
+                    <Play className={cn('size-6')} />
                 </Button>
                 <Button
-                    variant={'outline'}
-                    className={`rounded ${
-                        !isRunning
-                            ? 'bg-gray-400'
-                            : 'bg-red-500 hover:bg-red-600'
-                    }`}
-                    onClick={stopStopwatch}
+                    size={'icon'}
+                    variant="outline"
+                    className="size-12 rounded-full cursor-pointer"
+                    onClick={toggleStopWatch}
                     disabled={!isRunning}
                 >
-                    Stop
+                    <Pause className={cn('size-6')} />
                 </Button>
                 <Button
-                    variant={'outline'}
-                    className={`rounded ${
-                        !isRunning
-                            ? 'bg-gray-400'
-                            : 'bg-violet-500 hover:bg-violet-600'
-                    }`}
+                    size={'icon'}
+                    variant="outline"
+                    className="size-12 rounded-full cursor-pointer"
+                    disabled={!isRunning}
                     onClick={recordLap}
-                    disabled={!isRunning}
                 >
-                    lap
+                    <Flag className="size-6" />
                 </Button>
                 <Button
-                    variant={'outline'}
-                    className="bg-blue-500 hover:bg-blue-600 rounded"
+                    size={'icon'}
+                    variant="outline"
+                    className="size-12 rounded-full cursor-pointer"
                     onClick={resetStopwatch}
                 >
-                    Reset
+                    <RotateCcw className="size-6" />
                 </Button>
             </div>
-            {lapsRef.current.length > 0 && (
-                <div className="w-full max-w-xs">
-                    <h3 className="text-lg font-semibold mb-2">Laps</h3>
-                    <div className="list-decimal list-inside">
-                        {lapsRef.current.map((lap, index) => (
-                            <div key={index} className="text-sm">
-                                Lap {String(index + 1).padStart(2, '0')}:{' '}
-                                {formatTime(lap)}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
+            <LapsList list={lapsRef.current} />
         </div>
     )
 }
