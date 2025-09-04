@@ -32,6 +32,7 @@ const Timer = ({ className }: { className?: string }) => {
 
     const handleInputChange = (value: string) => {
         if (!/^\d*$/.test(value)) return // Only allow numeric input
+        if (isRunning) return
 
         if (timerFocusOn === 's' || timerFocusOn === 'm') {
             value = Number(value) < 60 ? value : (Number(value) % 10).toString()
@@ -59,6 +60,7 @@ const Timer = ({ className }: { className?: string }) => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.repeat) return // avoid multiple triggers while key is held
+            if (isRunning === true) return
 
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 // start timeout → if key is held for 750ms, start continuous change
@@ -92,7 +94,10 @@ const Timer = ({ className }: { className?: string }) => {
 
         const handleKeyUp = (e: KeyboardEvent) => {
             const { timeUnits, timerFocusOn } = stateRef.current
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            if (
+                (e.key === 'ArrowUp' || e.key === 'ArrowDown') &&
+                isRunning !== true
+            ) {
                 // clear timeout & interval
                 // if timeout didn’t finish → do single increment/decrement
                 if (timeoutRef.current) {
@@ -189,8 +194,16 @@ const Timer = ({ className }: { className?: string }) => {
                             transition={{ delay: 0.35 }}
                         >
                             <div
-                                className="flex flex-col items-center justify-center cursor-pointer"
-                                onClick={() => setTimerFocusUnit('h')}
+                                className={cn(
+                                    'flex flex-col items-center justify-center cursor-pointer',
+                                    isRunning && 'cursor-default'
+                                )}
+                                onClick={() =>
+                                    setTimerFocusUnit(
+                                        isRunning === null ? false : isRunning,
+                                        'h'
+                                    )
+                                }
                             >
                                 <AnimateNumber
                                     initialNumber={timeUnits.hour}
@@ -198,18 +211,20 @@ const Timer = ({ className }: { className?: string }) => {
                                     size="md"
                                     classNames={{
                                         digit: cn(
-                                            'text-5xl',
+                                            'text-5xl transition-all',
                                             timerFocusOn !== 'h' &&
-                                                'text-gray-500'
+                                                'text-gray-500',
+                                            isRunning && ' font-bold'
                                         ),
                                         digitContainer: 'w-8',
                                     }}
                                 />
                                 <span
                                     className={cn(
-                                        'text-sm font-mono text-gray-500',
+                                        'text-sm font-mono text-gray-500 transition-all',
                                         timerFocusOn === 'h' &&
-                                            'text-black font-bold'
+                                            'text-black font-bold',
+                                        isRunning && ' font-bold'
                                     )}
                                 >
                                     hours
@@ -217,8 +232,16 @@ const Timer = ({ className }: { className?: string }) => {
                             </div>
                             <span>:</span>
                             <div
-                                className="flex flex-col items-center justify-center cursor-pointer"
-                                onClick={() => setTimerFocusUnit('m')}
+                                className={cn(
+                                    'flex flex-col items-center justify-center cursor-pointer',
+                                    isRunning && 'cursor-default'
+                                )}
+                                onClick={() =>
+                                    setTimerFocusUnit(
+                                        isRunning === null ? false : isRunning,
+                                        'm'
+                                    )
+                                }
                             >
                                 <AnimateNumber
                                     initialNumber={timeUnits.minute}
@@ -226,18 +249,20 @@ const Timer = ({ className }: { className?: string }) => {
                                     size="md"
                                     classNames={{
                                         digit: cn(
-                                            'text-5xl',
+                                            'text-5xl transition-all',
                                             timerFocusOn !== 'm' &&
-                                                'text-gray-500'
+                                                'text-gray-500',
+                                            isRunning && ' font-bold'
                                         ),
                                         digitContainer: 'w-8',
                                     }}
                                 />
                                 <span
                                     className={cn(
-                                        'text-sm font-mono text-gray-500',
+                                        'text-sm font-mono text-gray-500 transition-all',
                                         timerFocusOn === 'm' &&
-                                            'text-black font-bold'
+                                            'text-black font-bold',
+                                        isRunning && ' font-bold'
                                     )}
                                 >
                                     minutes
@@ -245,8 +270,16 @@ const Timer = ({ className }: { className?: string }) => {
                             </div>
                             <span>:</span>
                             <div
-                                className="flex flex-col items-center justify-center cursor-pointer"
-                                onClick={() => setTimerFocusUnit('s')}
+                                className={cn(
+                                    'flex flex-col items-center justify-center cursor-pointer',
+                                    isRunning && 'cursor-default'
+                                )}
+                                onClick={() =>
+                                    setTimerFocusUnit(
+                                        isRunning === null ? false : isRunning,
+                                        's'
+                                    )
+                                }
                             >
                                 <AnimateNumber
                                     initialNumber={timeUnits.second}
@@ -254,18 +287,20 @@ const Timer = ({ className }: { className?: string }) => {
                                     size="md"
                                     classNames={{
                                         digit: cn(
-                                            'text-5xl',
+                                            'text-5xl transition-all',
                                             timerFocusOn !== 's' &&
-                                                'text-gray-500'
+                                                'text-gray-500',
+                                            isRunning && ' font-bold'
                                         ),
                                         digitContainer: 'w-8',
                                     }}
                                 />
                                 <span
                                     className={cn(
-                                        'text-sm font-mono text-gray-500',
+                                        'text-sm font-mono text-gray-500 transition-all',
                                         timerFocusOn === 's' &&
-                                            'text-black font-bold'
+                                            'text-black font-bold',
+                                        isRunning && ' font-bold'
                                     )}
                                 >
                                     seconds

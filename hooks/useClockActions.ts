@@ -83,7 +83,6 @@ export const useClockAction = () => {
     }
 
     const NextTimerFocusUnit = (timerFocusOn: 'h' | 'm' | 's') => {
-        console.log('NextTimerFocusUnit', timerFocusOn)
         switch (timerFocusOn) {
             case 'h':
                 dispatch(setTimerFocusOn('m'))
@@ -97,7 +96,8 @@ export const useClockAction = () => {
         }
     }
 
-    const setTimerFocusUnit = (unit: 'h' | 'm' | 's') => {
+    const setTimerFocusUnit = (isRunning: boolean, unit: 'h' | 'm' | 's') => {
+        if (isRunning === true) return
         dispatch(setTimerFocusOn(unit))
     }
 
