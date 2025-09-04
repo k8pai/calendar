@@ -14,9 +14,12 @@ import React, { useMemo } from 'react'
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
-    const { time, timezone, isInTimezoneView } = useAppSelector(
-        (state) => state.clock
-    )
+    const {
+        time,
+        timezone,
+        isInTimezoneView,
+        timer: { isRunning, time: timerTime },
+    } = useAppSelector((state) => state.clock)
     const countries = useMemo(() => {
         let response = getAllCountriesWithTimezones()
         return response
@@ -35,6 +38,15 @@ const Header: React.FC<HeaderProps> = ({}) => {
             </motion.div>
 
             <motion.div className="flex-1 flex justify-end items-center gap-5">
+                {isRunning && (
+                    <div className="mr-10 flex items-center justify-center gap-0.5 font-semibold">
+                        <div>{String(timerTime.hour).padStart(2, '0')}</div>
+                        <div>:</div>
+                        <div>{String(timerTime.minute).padStart(2, '0')}</div>
+                        <div>:</div>
+                        <div>{String(timerTime.second).padStart(2, '0')}</div>
+                    </div>
+                )}
                 <div className="flex items-center space-x-2">
                     <span className="text-center text-xs md:text-base lg:text-lg tracking-wider font-bold uppercase">
                         {format(new TZDate(time, timezone), 'dd MMMM yyyy')}

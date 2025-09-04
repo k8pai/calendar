@@ -19,7 +19,7 @@ const QuickSuggestions = () => {
         timerFocusOn,
         timer: { isRunning, time: timeUnits, duration },
     } = useAppSelector((state) => state.clock)
-    const { setTimerFocusUnit, updateTimerConfigs } = useClockAction()
+    const { updateTimerConfigs } = useClockAction()
     const timerUnitMap: Record<typeof timerFocusOn, keyof typeof timeUnits> = {
         h: 'hour',
         m: 'minute',
