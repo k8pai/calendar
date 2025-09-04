@@ -9,9 +9,12 @@ import { store } from '../../store/store'
 const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
     const dispatch = useAppDispatch()
 
-    const { commandMode, clockViewMode, timerFocusOn } = useAppSelector(
-        (state) => state.clock
-    )
+    const {
+        commandMode,
+        clockViewMode,
+        timerFocusOn,
+        timer: { isRunning },
+    } = useAppSelector((state) => state.clock)
 
     const { switchClockMode, NextTimerFocusUnit, PreviousTimerFocusUnit } =
         useClockAction()
@@ -35,28 +38,23 @@ const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
                     }
                     break
                 case 'ArrowRight':
-                    if (!commandMode && clockViewMode === 'timer') {
+                    if (
+                        !commandMode &&
+                        clockViewMode === 'timer' &&
+                        !isRunning
+                    ) {
                         NextTimerFocusUnit(timerFocusOn)
                     }
                     break
                 case 'ArrowLeft':
-                    if (!commandMode && clockViewMode === 'timer') {
+                    if (
+                        !commandMode &&
+                        clockViewMode === 'timer' &&
+                        !isRunning
+                    ) {
                         PreviousTimerFocusUnit(timerFocusOn)
                     }
                     break
-                // case 'y':
-                //     if (!commandMode) {
-                //         setYearView()
-                //     }
-                //     break
-                // case 'r':
-                //     if (!commandMode) {
-                //         reset()
-                //     }
-                //     break
-                // case 'Escape':
-                //     setCommandFlag(false)
-                //     break
                 default:
                     break
             }
@@ -66,7 +64,7 @@ const ClockShortcutProvider = ({ children }: { children: ReactNode }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [dispatch, timerFocusOn, commandMode, clockViewMode])
+    }, [dispatch, timerFocusOn, commandMode, clockViewMode, isRunning])
 
     return <Provider store={store}>{children}</Provider>
 }
